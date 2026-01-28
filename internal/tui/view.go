@@ -22,7 +22,8 @@ func (m *model) View() string {
 var pathItems = []string{
 	"(1) Path: *input*",
 	"(2) Open file chooser",
-	"(3) Confirm",
+	"(3) Try to detect",
+	"(4) Confirm",
 	"(q) Quit",
 }
 
@@ -47,7 +48,7 @@ func (m *model) pathView() string {
     }
     pathChoices = append(pathChoices, row)
 
-    if i == 2 {
+    if i == 3 {
       status := fmt.Sprintf("    Chosen path: %s", "/path/to/cs")
       pathChoices = append(pathChoices, statusStyle.Render(status))
     }
@@ -56,7 +57,7 @@ func (m *model) pathView() string {
 	items := strings.Join(pathChoices, "\n")
 	view := fmt.Sprintf(
 		"%s\n\n%s\n\n%s",
-		wordwrap.String(titleStyle.Render("Choose path to /game/ folder:"), m.width),
+		wordwrap.String(titleStyle.Render("Choose cs2 installation path:"), m.width),
 		lipgloss.NewStyle().Width(35).Render(items),
 		wordwrap.String(helpStyle.Render("(↓↑: move | space/enter: select | q/esc: quit)"), m.width),
 	)

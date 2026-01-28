@@ -1,7 +1,11 @@
 package tui
 
 import (
+	"log"
+
 	tea "github.com/charmbracelet/bubbletea"
+
+	"github.com/dom1torii/even-better-font-manager/internal/platform/filepicker"
 )
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -134,7 +138,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.pathInput.Focus()
 			}
 			if m.PathSelection == 1 {
-				// m.state = statePresets
+				log.Println(filepicker.ChoosePath())
 				return m, nil
 			}
 			if m.PathSelection == 2 {
