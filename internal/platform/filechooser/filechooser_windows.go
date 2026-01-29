@@ -1,6 +1,6 @@
 //go:build windows
 
-package filepicker
+package filechooser
 
 func ChoosePath() string {
 	return "placeholder"
