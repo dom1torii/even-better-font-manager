@@ -42,5 +42,5 @@ func DetectCS2Path() string {
 	}
 
 	log.Println("No CS2 path detected")
-  return ""
+	return ""
 }

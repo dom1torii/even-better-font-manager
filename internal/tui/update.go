@@ -92,21 +92,21 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.pathInput.Focused() {
-    if key, ok := msg.(tea.KeyMsg); ok {
-      switch key.String() {
-      case "enter":
-        m.pathInput.Blur()
-        m.csPath = m.pathInput.Value()
-        return m, nil
-      case "esc":
-	      m.pathInput.Blur()
-	      return m, nil
-      }
-    }
-    var cmd tea.Cmd
-    m.pathInput, cmd = m.pathInput.Update(msg)
-    return m, cmd
-  }
+		if key, ok := msg.(tea.KeyMsg); ok {
+			switch key.String() {
+			case "enter":
+				m.pathInput.Blur()
+				m.csPath = m.pathInput.Value()
+				return m, nil
+			case "esc":
+				m.pathInput.Blur()
+				return m, nil
+			}
+		}
+		var cmd tea.Cmd
+		m.pathInput, cmd = m.pathInput.Update(msg)
+		return m, cmd
+	}
 
 	switch msg := msg.(type) {
 	case tea.KeyMsg:

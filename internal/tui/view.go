@@ -37,22 +37,22 @@ func pathItem(label string, isSelected bool) string {
 func (m *model) pathView() string {
 	var pathChoices []string
 
-  for i, label := range pathItems {
-    var row string
-    // add actual input instead of *input*
-    if i == 0 {
-      inputView := m.pathInput.View()
-      row = pathItem("(1) Path: "+inputView, m.PathSelection == i)
-    } else {
-      row = pathItem(label, m.PathSelection == i)
-    }
-    pathChoices = append(pathChoices, row)
+	for i, label := range pathItems {
+		var row string
+		// add actual input instead of *input*
+		if i == 0 {
+			inputView := m.pathInput.View()
+			row = pathItem("(1) Path: "+inputView, m.PathSelection == i)
+		} else {
+			row = pathItem(label, m.PathSelection == i)
+		}
+		pathChoices = append(pathChoices, row)
 
-    if i == 3 {
-      status := fmt.Sprintf("    Chosen path: %s", m.csPath)
-      pathChoices = append(pathChoices, statusStyle.Render(status))
-    }
-  }
+		if i == 3 {
+			status := fmt.Sprintf("    Chosen path: %s", m.csPath)
+			pathChoices = append(pathChoices, statusStyle.Render(status))
+		}
+	}
 
 	items := strings.Join(pathChoices, "\n")
 	view := fmt.Sprintf(
