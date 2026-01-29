@@ -6,6 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 )
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -142,6 +143,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			if m.PathSelection == 2 {
+				log.Println(detectpath.DetectCS2Path())
 				return m, nil
 			}
 			if m.PathSelection == 3 {
