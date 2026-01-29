@@ -49,7 +49,7 @@ func (m *model) pathView() string {
     pathChoices = append(pathChoices, row)
 
     if i == 3 {
-      status := fmt.Sprintf("    Chosen path: %s", "/path/to/cs")
+      status := fmt.Sprintf("    Chosen path: %s", m.csPath)
       pathChoices = append(pathChoices, statusStyle.Render(status))
     }
   }

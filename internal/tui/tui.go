@@ -40,6 +40,7 @@ type model struct {
 	width  int
 
 	pathInput textinput.Model
+	csPath    string
 
 	PathSelection  int
 	StartSelection int

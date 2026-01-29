@@ -1,5 +1,3 @@
 package tui
 
-func temp() bool {
-	return true
-}
+type csPathMsg string

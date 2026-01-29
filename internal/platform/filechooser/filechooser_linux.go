@@ -16,7 +16,7 @@ func ChoosePath() string {
 		"--title=Choose your Counter-Strike Global Offensive/ folder")
 	output, err := cmd.Output()
 	if err != nil {
-	  log.Fatal(err)
+	  log.Println("File chooser was closed or zenity failed: ", err)
 	}
 	path := strings.TrimSpace(string(output))
 

@@ -28,7 +28,6 @@ func DetectCS2Path() string {
 	}
 
 	csAppId := "730"
-
 	// we try to find "path" of the folder that has "730" inside its "apps"
 	if libraryFolders, ok := m["libraryfolders"].(map[string]any); ok {
 		for _, folderData := range libraryFolders {

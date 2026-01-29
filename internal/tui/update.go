@@ -1,12 +1,9 @@
 package tui
 
 import (
-	"log"
+	// "log"
 
 	tea "github.com/charmbracelet/bubbletea"
-
-	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
-	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 )
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -14,6 +11,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
+
+	case csPathMsg:
+		m.csPath = string(msg)
+		return m, nil
 
 	case tea.KeyMsg:
 		switch keypress := msg.String(); keypress {
@@ -93,9 +94,13 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.pathInput.Focused() {
     if key, ok := msg.(tea.KeyMsg); ok {
       switch key.String() {
-      case "enter", "esc":
+      case "enter":
         m.pathInput.Blur()
+        m.csPath = m.pathInput.Value()
         return m, nil
+      case "esc":
+	      m.pathInput.Blur()
+	      return m, nil
       }
     }
     var cmd tea.Cmd
@@ -139,12 +144,10 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.pathInput.Focus()
 			}
 			if m.PathSelection == 1 {
-				log.Println(filechooser.ChoosePath())
-				return m, nil
+				return m, m.chooseCsPath()
 			}
 			if m.PathSelection == 2 {
-				log.Println(detectpath.DetectCS2Path())
-				return m, nil
+				return m, m.detectCsPath()
 			}
 			if m.PathSelection == 3 {
 				return m, nil
