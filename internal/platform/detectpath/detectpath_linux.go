@@ -3,8 +3,9 @@
 package detectpath
 
 import (
-	"os"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/andygrunwald/vdf"
 )
@@ -34,7 +35,7 @@ func DetectCS2Path() string {
 			if folder, ok := folderData.(map[string]any); ok {
 				if apps, ok := folder["apps"].(map[string]any); ok {
 					if _, found := apps[csAppId]; found {
-						return folder["path"].(string)
+						return filepath.Join(folder["path"].(string), "steamapps/common/Counter-Strike Global Offensive")
 					}
 				}
 			}
