@@ -14,9 +14,14 @@ import (
 )
 
 type Config struct {
-	Log LogConfig `toml:"logging"`
+	General GeneralConfig `toml:"general"`
+	Log     LogConfig     `toml:"logging"`
 
 	// cli mode
+}
+
+type GeneralConfig struct {
+	CS2Path string `toml:"cs2_path"`
 }
 
 type LogConfig struct {
@@ -104,4 +109,20 @@ func getFlag(value, fallback string) string {
 		return fallback
 	}
 	return value
+}
+
+func (cfg *Config) Apply() {
+	homeDir := fs.GetHomeDir()
+	configDir := filepath.Join(homeDir, ".config", "ebfm")
+	configFile := filepath.Join(configDir, "config.toml")
+
+	f, err := os.Create(configFile)
+  if err != nil {
+  	log.Fatalln("Failed to create config file: ", err)
+  }
+  defer f.Close()
+
+  if err := toml.NewEncoder(f).Encode(cfg); err != nil {
+  	log.Fatalln("Failed to encode toml: ", err)
+  }
 }

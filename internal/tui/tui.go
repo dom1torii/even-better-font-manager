@@ -58,8 +58,14 @@ func InitialModel(cfg *config.Config) *model {
 	ti.Width = 20
 	ti.PromptStyle = lipgloss.NewStyle()
 
+	initialState := stateStart
+	if cfg.General.CS2Path == "" {
+		initialState = statePath
+	}
+
 	return &model{
 		cfg: cfg,
+		state: initialState,
 
 		pathInput: ti,
 

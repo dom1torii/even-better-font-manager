@@ -2,12 +2,14 @@ package tui
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
 )
 
 func (m *model) Init() tea.Cmd {
 	return tea.Batch(
+		m.getCsPath(),
 		tea.SetWindowTitle("Even Better Font Manager"),
 	)
 }
@@ -23,5 +25,20 @@ func (m *model) chooseCsPath() tea.Cmd {
 	return func() tea.Msg {
 		path := filechooser.ChoosePath()
 		return csPathMsg(path)
+	}
+}
+
+func (m *model) confirmCsPath() tea.Cmd {
+  return func() tea.Msg {
+    m.cfg.General.CS2Path = m.csPath
+    m.cfg.Apply()
+    return pathConfirmedMsg{}
+  }
+}
+
+func (m *model) getCsPath() tea.Cmd {
+	return func() tea.Msg {
+		path := m.cfg.General.CS2Path
+			return csPathMsg(path)
 	}
 }

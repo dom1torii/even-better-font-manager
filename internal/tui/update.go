@@ -16,6 +16,9 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.csPath = string(msg)
 		return m, nil
 
+	case pathConfirmedMsg:
+		return m, nil
+
 	case tea.KeyMsg:
 		switch keypress := msg.String(); keypress {
 		case "ctrl+c":
@@ -150,7 +153,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.detectCsPath()
 			}
 			if m.PathSelection == 3 {
-				return m, nil
+				return m, m.confirmCsPath()
 			}
 			if m.PathSelection == 4 {
 				m.Quitting = true
