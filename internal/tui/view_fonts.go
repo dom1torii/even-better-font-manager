@@ -69,7 +69,6 @@ func (m *model) fontsView() string {
 	var leftChoices []string
 	start := m.fonts.startRow
 	end := min(start+maxViewHeight, len(fontItemsTemp))
-
 	for i := start; i < end; i++ {
 		isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
 		leftChoices = append(leftChoices, fontItem(fontItemsTemp[i], isSelected, leftWidth-4))
@@ -81,8 +80,14 @@ func (m *model) fontsView() string {
 		rightChoices = append(rightChoices, fontItem(label, isSelected, 0))
 	}
 
+	rightTitle := lipgloss.NewStyle().PaddingTop(1).Render("Add font:")
+
 	leftCol := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(leftWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, leftChoices...))
-	rightCol := lipgloss.NewStyle().PaddingTop(1).Render(lipgloss.JoinVertical(lipgloss.Left, rightChoices...))
+	rightCol := lipgloss.JoinVertical(
+		lipgloss.Left,
+		rightTitle,
+		lipgloss.NewStyle().Render(lipgloss.JoinVertical(lipgloss.Left, rightChoices...)),
+	)
 
 	columns := lipgloss.JoinHorizontal(lipgloss.Top, leftCol, rightCol)
 
@@ -90,7 +95,7 @@ func (m *model) fontsView() string {
 		"%s\n\n%s\n\n%s",
 		titleStyle.Render("Your fonts"),
 		columns,
-		wordwrap.String(helpStyle.Render("(←↓↑→: move | d: remove font | q: quit)"), m.width),
+		wordwrap.String(helpStyle.Render("(←↓↑→: move | p: preview font | d: remove font | q: quit)"), m.width),
 	)
 
 	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)
