@@ -11,8 +11,8 @@ import (
 
 type fontsModel struct {
 	colActive int
-	leftRow   int
-	rightRow  int
+	leftSelection   int
+	rightSelection  int
 	startRow  int
 }
 
@@ -23,17 +23,17 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "k", "up":
-			if m.fonts.colActive == 0 && m.fonts.leftRow > 0 {
-				m.fonts.leftRow--
-			} else if m.fonts.colActive == 1 && m.fonts.rightRow > 0 {
-				m.fonts.rightRow--
+			if m.fonts.colActive == 0 && m.fonts.leftSelection > 0 {
+				m.fonts.leftSelection--
+			} else if m.fonts.colActive == 1 && m.fonts.rightSelection > 0 {
+				m.fonts.rightSelection--
 			}
 
 		case "j", "down":
-			if m.fonts.colActive == 0 && m.fonts.leftRow < len(fontItemsTemp)-1 {
-				m.fonts.leftRow++
-			} else if m.fonts.colActive == 1 && m.fonts.rightRow < len(fontItems)-1 {
-				m.fonts.rightRow++
+			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(fontItemsTemp)-1 {
+				m.fonts.leftSelection++
+			} else if m.fonts.colActive == 1 && m.fonts.rightSelection < len(fontItems)-1 {
+				m.fonts.rightSelection++
 			}
 
 		case "h", "left":
@@ -52,10 +52,10 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// left column scrolling
 		if m.fonts.colActive == 0 {
-			if m.fonts.leftRow >= m.fonts.startRow+maxViewHeight {
-				m.fonts.startRow = m.fonts.leftRow - maxViewHeight + 1
-			} else if m.fonts.leftRow < m.fonts.startRow {
-				m.fonts.startRow = m.fonts.leftRow
+			if m.fonts.leftSelection >= m.fonts.startRow+maxViewHeight {
+				m.fonts.startRow = m.fonts.leftSelection - maxViewHeight + 1
+			} else if m.fonts.leftSelection < m.fonts.startRow {
+				m.fonts.startRow = m.fonts.leftSelection
 			}
 		}
 	}
@@ -71,13 +71,13 @@ func (m *model) fontsView() string {
 	end := min(start+maxViewHeight, len(fontItemsTemp))
 
 	for i := start; i < end; i++ {
-		isSelected := (m.fonts.colActive == 0 && m.fonts.leftRow == i)
+		isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
 		leftChoices = append(leftChoices, fontItem(fontItemsTemp[i], isSelected, leftWidth-4))
 	}
 
 	var rightChoices []string
 	for i, label := range fontItems {
-		isSelected := (m.fonts.colActive == 1 && m.fonts.rightRow == i)
+		isSelected := (m.fonts.colActive == 1 && m.fonts.rightSelection == i)
 		rightChoices = append(rightChoices, fontItem(label, isSelected, 0))
 	}
 
