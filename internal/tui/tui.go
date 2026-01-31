@@ -32,6 +32,7 @@ const (
 	statePath sessionState = iota
 	stateStart
 	stateFonts
+	stateSystemFont
 )
 
 type model struct {
@@ -40,11 +41,12 @@ type model struct {
 	height int
 	width  int
 
-	path pathModel
-	start startModel
-	fonts fontsModel
+	path       pathModel
+	start      startModel
+	fonts      fontsModel
+	systemFont systemFontModel
 
-	csPath    string
+	csPath string
 
 	Err      error
 	Quitting bool
@@ -69,7 +71,18 @@ func InitialModel(cfg *config.Config) *model {
 		state: initialState,
 
 		path: pathModel{
+			selection: 0,
 			pathInput: ti,
+		},
+		start: startModel{
+			selection: 0,
+		},
+		fonts: fontsModel{
+			leftSelection: 0,
+			rightSelection: 0,
+		},
+		systemFont: systemFontModel{
+			selection: 0,
 		},
 
 		Quitting: false,

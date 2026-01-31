@@ -31,6 +31,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.updatePathSelection(msg)
 		case stateFonts:
 			return m.updateFontSelection(msg)
+		case stateSystemFont:
+			return m.updateSystemFontSelection(msg)
 		}
 	}
 

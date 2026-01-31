@@ -8,6 +8,8 @@ func (m *model) View() string {
 		return m.startView()
 	case stateFonts:
 		return m.fontsView()
+	case stateSystemFont:
+		return m.systemFontView()
 	default:
 		return ""
 	}

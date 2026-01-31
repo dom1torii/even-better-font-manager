@@ -46,6 +46,16 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.fonts.colActive = 1
 			}
 
+		case "enter", " ":
+			if m.fonts.colActive == 1 && m.fonts.rightSelection == 0 {
+				// m.state = stateCustomFont
+				return m, nil
+			}
+			if m.fonts.colActive == 1 && m.fonts.rightSelection == 1 {
+				m.state = stateSystemFont
+				return m, nil
+			}
+
 		case "q", "esc":
 			return m, tea.Quit
 		}
@@ -98,7 +108,13 @@ func (m *model) fontsView() string {
 		wordwrap.String(helpStyle.Render("(←↓↑→: move | p: preview font | d: remove font | q: quit)"), m.width),
 	)
 
-	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)
+	return lipgloss.Place(
+		m.width,
+		m.height,
+		lipgloss.Center,
+		lipgloss.Center,
+		view,
+	)
 }
 
 var fontItems = []string{
