@@ -24,6 +24,7 @@ var (
 	helpStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingLeft(4).PaddingBottom(1)
 	modeAllowStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("2"))
 	modeBlockStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
+	inputStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("0")).Italic(true)
 )
 
 type sessionState int
@@ -53,13 +54,24 @@ type model struct {
 }
 
 func InitialModel(cfg *config.Config) *model {
-	ti := textinput.New()
-	ti.Placeholder = "/path/to/cs2/"
-	ti.Blur()
-	ti.Prompt = ""
-	ti.CharLimit = 156
-	ti.Width = 20
-	ti.PromptStyle = lipgloss.NewStyle()
+	// change these to use prompt instead of what is used rn
+	pi := textinput.New()
+	pi.Placeholder = "/path/to/cs2/"
+	pi.Blur()
+	pi.Prompt = ""
+	pi.CharLimit = 156
+	pi.Width = 20
+	pi.PromptStyle = lipgloss.NewStyle()
+	pi.PlaceholderStyle = inputStyle
+
+	si := textinput.New()
+	si.Placeholder = "font name"
+	si.Blur()
+	si.Prompt = ""
+	si.CharLimit = 156
+	si.Width = 50
+	si.PromptStyle = lipgloss.NewStyle()
+	si.PlaceholderStyle = inputStyle
 
 	initialState := stateStart
 	if cfg.General.CS2Path == "" {
@@ -72,7 +84,7 @@ func InitialModel(cfg *config.Config) *model {
 
 		path: pathModel{
 			selection: 0,
-			pathInput: ti,
+			pathInput: pi,
 		},
 		start: startModel{
 			selection: 0,
@@ -83,6 +95,7 @@ func InitialModel(cfg *config.Config) *model {
 		},
 		systemFont: systemFontModel{
 			selection: 0,
+			searchInput: si,
 		},
 
 		Quitting: false,

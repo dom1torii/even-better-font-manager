@@ -5,8 +5,10 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	// "github.com/muesli/reflow/wordwrap"
+	"github.com/muesli/reflow/wordwrap"
 	"github.com/muesli/reflow/truncate"
+	"github.com/charmbracelet/bubbles/textinput"
+
 	"github.com/dom1torii/even-better-font-manager/internal/platform/systemfonts"
 )
 
@@ -14,11 +16,31 @@ type systemFontModel struct {
 	selection int
 	startRow  int
 	fonts     []systemfonts.SystemFont
+	searchInput textinput.Model
 }
 
 func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
   maxViewHeight := 10
   numItems := len(m.systemFont.fonts)
+
+ 	if m.systemFont.searchInput.Focused() {
+		if key, ok := msg.(tea.KeyMsg); ok {
+			switch key.String() {
+			case "up":
+				m.systemFont.searchInput.Blur()
+				return m, nil
+			case "enter":
+				m.systemFont.searchInput.Blur()
+				return m, nil
+			case "esc":
+				m.systemFont.searchInput.Blur()
+				return m, nil
+			}
+		}
+		var cmd tea.Cmd
+		m.systemFont.searchInput, cmd = m.systemFont.searchInput.Update(msg)
+		return m, cmd
+	}
 
   switch msg := msg.(type) {
   case tea.KeyMsg:
@@ -34,6 +56,8 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
     case "q", "esc":
     	m.state = stateFonts
       return m, nil
+    case "f":
+    	return m, m.systemFont.searchInput.Focus()
     }
 
     // font list scrolling
@@ -60,14 +84,16 @@ func (m *model) systemFontView() string {
   }
 
   fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))
-  search := "Search: *input*"
+  inputView := m.systemFont.searchInput.View()
+  searchInput := "Search: " + inputView
+  search := lipgloss.NewStyle().Width(fontsWidth).Align(lipgloss.Center).Render(searchInput)
   content := lipgloss.JoinVertical(lipgloss.Center, fontList, search)
 
   view := fmt.Sprintf(
     "%s\n\n%s\n\n%s",
     titleStyle.Render("Add system font"),
     content,
-    helpStyle.Render("(↑↓: move | p: preview | f: search | enter/space: add | q: back)"),
+    wordwrap.String(helpStyle.Render("(↑↓: move | p: preview | f: search | enter/space: add | q: back)"), m.width),
   )
 
   return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)
