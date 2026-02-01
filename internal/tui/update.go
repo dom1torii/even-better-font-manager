@@ -10,6 +10,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 
+	case systemFontsMsg:
+		m.systemFont.fonts = msg
+		return m, nil
+
 	case csPathMsg:
 		m.csPath = string(msg)
 		return m, nil

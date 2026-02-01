@@ -7,16 +7,18 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	// "github.com/muesli/reflow/wordwrap"
 	"github.com/muesli/reflow/truncate"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/systemfonts"
 )
 
 type systemFontModel struct {
 	selection int
 	startRow  int
+	fonts     []systemfonts.SystemFont
 }
 
 func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
   maxViewHeight := 10
-  numItems := len(systemFontTemp)
+  numItems := len(m.systemFont.fonts)
 
   switch msg := msg.(type) {
   case tea.KeyMsg:
@@ -45,16 +47,16 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *model) systemFontView() string {
-  maxViewHeight := 10
-  fontsWidth := max(min(m.width-30, 40), 20)
+  maxViewHeight := 12
+  fontsWidth := max(min(m.width-10, 50), 20)
 
   var choices []string
   start := m.systemFont.startRow
-  end := min(start+maxViewHeight, len(systemFontTemp))
+  end := min(start+maxViewHeight, len(m.systemFont.fonts))
 
   for i := start; i < end; i++ {
     isSelected := m.systemFont.selection == i
-    choices = append(choices, systemFontItem(systemFontTemp[i], isSelected, fontsWidth-4))
+    choices = append(choices, systemFontItem(m.systemFont.fonts[i].Name, isSelected, fontsWidth-4))
   }
 
   fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))
@@ -65,26 +67,10 @@ func (m *model) systemFontView() string {
     "%s\n\n%s\n\n%s",
     titleStyle.Render("Add system font"),
     content,
-    helpStyle.Render("(↑↓: move | p: preview | enter/space: add | q: back)"),
+    helpStyle.Render("(↑↓: move | p: preview | f: search | enter/space: add | q: back)"),
   )
 
   return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)
-}
-
-// temporary for testing
-var systemFontTemp = []string{
-	"Font 1dsadasdasadsasdadsdasdas",
-	"Font 2",
-	"Font 3",
-	"Font 4",
-	"Font 5",
-	"Font 6",
-	"Font 7",
-	"Font 8",
-	"Font 9",
-	"Font 10",
-	"Font 11",
-	"Font 12",
 }
 
 func systemFontItem(label string, isSelected bool, width int) string {

@@ -1,0 +1,54 @@
+//go:build linux
+
+package systemfonts
+
+import (
+	"log"
+	"os/exec"
+	"sort"
+	"strings"
+)
+
+type SystemFont struct {
+	Path string
+	Name string
+}
+
+func GetFonts() []SystemFont {
+	cmd := exec.Command("fc-list")
+	output, err := cmd.Output()
+  if err != nil {
+    log.Fatalln("Failed to run fc-list: ", err)
+  }
+
+  lines := strings.Split(string(output), "\n")
+
+  var fonts []SystemFont
+  for _, line := range lines {
+ 		if strings.TrimSpace(line) == "" {
+      continue
+    }
+
+ 		parts := strings.SplitN(line, ":", 2)
+   	path := strings.TrimSpace(parts[0])
+    secondPart := strings.Split(parts[1], ":")
+
+    // one font (for some reason) can have multiple names separated my comma,
+    // so we use last one since it usually describes font the best
+    fontNames := strings.TrimSpace(secondPart[0])
+    nameList := strings.Split(fontNames, ",")
+
+    finalName := strings.TrimSpace(nameList[len(nameList)-1])
+
+    fonts = append(fonts, SystemFont{
+      Path: path,
+      Name: finalName,
+    })
+  }
+
+  sort.SliceStable(fonts, func(i, j int) bool {
+    return strings.ToLower(fonts[i].Name) < strings.ToLower(fonts[j].Name)
+  })
+
+  return fonts
+}

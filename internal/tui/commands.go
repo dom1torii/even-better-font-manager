@@ -5,11 +5,13 @@ import (
 
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/systemfonts"
 )
 
 func (m *model) Init() tea.Cmd {
 	return tea.Batch(
 		m.getCsPath(),
+		m.getSystemFonts(),
 		tea.SetWindowTitle("Even Better Font Manager"),
 	)
 }
@@ -39,6 +41,13 @@ func (m *model) confirmCsPath() tea.Cmd {
 func (m *model) getCsPath() tea.Cmd {
 	return func() tea.Msg {
 		path := m.cfg.General.CS2Path
-			return csPathMsg(path)
+		return csPathMsg(path)
+	}
+}
+
+func (m *model) getSystemFonts() tea.Cmd {
+	return func() tea.Msg {
+		fonts := systemfonts.GetFonts()
+		return systemFontsMsg(fonts)
 	}
 }
