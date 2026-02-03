@@ -23,7 +23,6 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		case "2":
 			m.start.selection = 1
-			// m.state = statePresets
 		case "3":
 			m.start.selection = 2
 			return m, nil
@@ -51,7 +50,6 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			if m.start.selection == 1 {
-				// m.state = statePresets
 				return m, nil
 			}
 			if m.start.selection == 2 {

@@ -54,11 +54,10 @@ type model struct {
 }
 
 func InitialModel(cfg *config.Config) *model {
-	// change these to use prompt instead of what is used rn
 	pi := textinput.New()
 	pi.Placeholder = "/path/to/cs2/"
 	pi.Blur()
-	pi.Prompt = ""
+	pi.Prompt = "Path: "
 	pi.CharLimit = 156
 	pi.Width = 20
 	pi.PromptStyle = lipgloss.NewStyle()
@@ -67,7 +66,7 @@ func InitialModel(cfg *config.Config) *model {
 	si := textinput.New()
 	si.Placeholder = "font name"
 	si.Blur()
-	si.Prompt = ""
+	si.Prompt = "Search: "
 	si.CharLimit = 156
 	si.Width = 50
 	si.PromptStyle = lipgloss.NewStyle()

@@ -38,11 +38,10 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "1":
 			m.path.selection = 0
-			// m.state = stateRelays
 			return m, nil
 		case "2":
 			m.path.selection = 1
-			// m.state = statePresets
+			return m, nil
 		case "3":
 			m.path.selection = 2
 			return m, nil
@@ -75,11 +74,16 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.detectCsPath()
 			}
 			if m.path.selection == 3 {
+				m.state = stateStart
 				return m, m.confirmCsPath()
 			}
 			if m.path.selection == 4 {
 				m.Quitting = true
 				return m, tea.Quit
+			}
+		case "i":
+			if m.path.selection == 0 {
+				return m, m.path.pathInput.Focus()
 			}
 		}
 	}
@@ -94,7 +98,7 @@ func (m *model) pathView() string {
 		// add actual input instead of *input*
 		if i == 0 {
 			inputView := m.path.pathInput.View()
-			row = pathItem("(1) Path: "+inputView, m.path.selection == i)
+			row = pathItem("(1) "+inputView, m.path.selection == i)
 		} else {
 			row = pathItem(label, m.path.selection == i)
 		}

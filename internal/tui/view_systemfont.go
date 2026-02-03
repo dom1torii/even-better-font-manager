@@ -89,9 +89,7 @@ func (m *model) systemFontView() string {
   }
 
   fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))
-  inputView := m.systemFont.searchInput.View()
-  searchInput := "Search: " + inputView
-  search := lipgloss.NewStyle().Width(fontsWidth).Align(lipgloss.Center).Render(searchInput)
+  search := lipgloss.NewStyle().Width(fontsWidth).Align(lipgloss.Center).Render(m.systemFont.searchInput.View())
   content := lipgloss.JoinVertical(lipgloss.Center, fontList, search)
 
   view := fmt.Sprintf(
