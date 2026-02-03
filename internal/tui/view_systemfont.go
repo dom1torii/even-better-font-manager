@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -13,20 +14,21 @@ import (
 )
 
 type systemFontModel struct {
-	selection int
-	startRow  int
-	fonts     []systemfonts.SystemFont
-	searchInput textinput.Model
+	selection     int
+	startRow      int
+	fonts         []systemfonts.SystemFont
+	filteredFonts []systemfonts.SystemFont
+	searchInput   textinput.Model
 }
 
 func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
   maxViewHeight := 10
-  numItems := len(m.systemFont.fonts)
+  numItems := len(m.systemFont.filteredFonts)
 
  	if m.systemFont.searchInput.Focused() {
 		if key, ok := msg.(tea.KeyMsg); ok {
 			switch key.String() {
-			case "up":
+			case "up", "down":
 				m.systemFont.searchInput.Blur()
 				return m, nil
 			case "enter":
@@ -39,6 +41,9 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		var cmd tea.Cmd
 		m.systemFont.searchInput, cmd = m.systemFont.searchInput.Update(msg)
+
+		m.filterFonts()
+
 		return m, cmd
 	}
 
@@ -76,11 +81,11 @@ func (m *model) systemFontView() string {
 
   var choices []string
   start := m.systemFont.startRow
-  end := min(start+maxViewHeight, len(m.systemFont.fonts))
+  end := min(start+maxViewHeight, len(m.systemFont.filteredFonts))
 
   for i := start; i < end; i++ {
     isSelected := m.systemFont.selection == i
-    choices = append(choices, systemFontItem(m.systemFont.fonts[i].Name, isSelected, fontsWidth-4))
+    choices = append(choices, systemFontItem(m.systemFont.filteredFonts[i].Name, isSelected, fontsWidth-4))
   }
 
   fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))
@@ -108,4 +113,23 @@ func systemFontItem(label string, isSelected bool, width int) string {
 		return selectionStyle.Render(truncated)
 	}
 	return truncated
+}
+
+func (m *model) filterFonts() {
+  value := strings.ToLower(m.systemFont.searchInput.Value())
+  if value == "" {
+    m.systemFont.filteredFonts = m.systemFont.fonts
+  } else {
+    var filtered []systemfonts.SystemFont
+    for _, f := range m.systemFont.fonts {
+      if strings.Contains(strings.ToLower(f.Name), value) {
+        filtered = append(filtered, f)
+      }
+    }
+    m.systemFont.filteredFonts = filtered
+  }
+
+  // selection might go further that expected so we reset it to 0
+  m.systemFont.selection = 0
+  m.systemFont.startRow = 0
 }

@@ -12,6 +12,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case systemFontsMsg:
 		m.systemFont.fonts = msg
+		m.systemFont.filteredFonts = msg
 		return m, nil
 
 	case csPathMsg:
