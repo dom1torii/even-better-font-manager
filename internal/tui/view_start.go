@@ -56,6 +56,7 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			if m.start.selection == 3 {
+				m.state = statePath
 				return m, nil
 			}
 			if m.start.selection == 4 {
@@ -73,7 +74,7 @@ func (m *model) startView() string {
 		startChoices = append(startChoices, startItem(label, m.start.selection == i))
 		// add status lines
 		if i == 2 {
-			status := fmt.Sprintf("    Will apply: %s", "font name")
+			status := fmt.Sprintf("    Will apply: %s", m.chosenFont.Name)
 			startChoices = append(startChoices, statusStyle.Render(status))
 		}
 	}

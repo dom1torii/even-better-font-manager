@@ -22,12 +22,14 @@ type systemFontModel struct {
 }
 
 func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
-  maxViewHeight := 10
+  maxViewHeight := 12
   numItems := len(m.systemFont.filteredFonts)
 
- 	if m.systemFont.searchInput.Focused() {
-		if key, ok := msg.(tea.KeyMsg); ok {
-			switch key.String() {
+  switch msg := msg.(type) {
+  case tea.KeyMsg:
+  	// keypresses inside focused input
+	 	if m.systemFont.searchInput.Focused() {
+			switch msg.String() {
 			case "up", "down":
 				m.systemFont.searchInput.Blur()
 				return m, nil
@@ -38,17 +40,15 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.systemFont.searchInput.Blur()
 				return m, nil
 			}
+			var cmd tea.Cmd
+			m.systemFont.searchInput, cmd = m.systemFont.searchInput.Update(msg)
+
+			m.filterFonts()
+
+			return m, cmd
 		}
-		var cmd tea.Cmd
-		m.systemFont.searchInput, cmd = m.systemFont.searchInput.Update(msg)
 
-		m.filterFonts()
-
-		return m, cmd
-	}
-
-  switch msg := msg.(type) {
-  case tea.KeyMsg:
+		// normal keypresses
     switch msg.String() {
     case "k", "up":
       if m.systemFont.selection > 0 {
@@ -63,6 +63,13 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
       return m, nil
     case "f":
     	return m, m.systemFont.searchInput.Focus()
+    case "enter", " ":
+   		m.chosenFont = chosenFont{
+        Name: m.systemFont.filteredFonts[m.systemFont.selection].Name,
+        Path: m.systemFont.filteredFonts[m.systemFont.selection].Path,
+      }
+     	m.state = stateStart
+    	return m, nil
     }
 
     // font list scrolling

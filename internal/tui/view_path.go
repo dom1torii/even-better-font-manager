@@ -16,9 +16,12 @@ type pathModel struct {
 }
 
 func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if m.path.pathInput.Focused() {
-		if key, ok := msg.(tea.KeyMsg); ok {
-			switch key.String() {
+
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		// keypresses inside focused input
+		if m.path.pathInput.Focused() {
+			switch msg.String() {
 			case "enter":
 				m.path.pathInput.Blur()
 				m.csPath = m.path.pathInput.Value()
@@ -27,14 +30,12 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.path.pathInput.Blur()
 				return m, nil
 			}
+			var cmd tea.Cmd
+			m.path.pathInput, cmd = m.path.pathInput.Update(msg)
+			return m, cmd
 		}
-		var cmd tea.Cmd
-		m.path.pathInput, cmd = m.path.pathInput.Update(msg)
-		return m, cmd
-	}
 
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
+		// normal keypresses
 		switch msg.String() {
 		case "1":
 			m.path.selection = 0
