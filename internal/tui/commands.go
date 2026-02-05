@@ -5,6 +5,7 @@ import (
 
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/previewfont"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/systemfonts"
 )
 
@@ -49,5 +50,12 @@ func (m *model) getSystemFonts() tea.Cmd {
 	return func() tea.Msg {
 		fonts := systemfonts.GetFonts()
 		return systemFontsMsg(fonts)
+	}
+}
+
+func (m *model) previewFont() tea.Cmd {
+	return func() tea.Msg {
+		previewfont.PreviewFont(m.systemFont.filteredFonts[m.systemFont.selection].Path)
+		return fontPreviewMsg{}
 	}
 }

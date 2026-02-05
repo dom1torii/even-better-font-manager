@@ -35,6 +35,8 @@ func GetFonts() []SystemFont {
 
     // one font (for some reason) can have multiple names separated my comma,
     // so we use last one since it usually describes font the best
+    // EDIT: i need to do something else since sometimes it has the same name
+    // for multiple fonts of different weight, example Noto Sans
     fontNames := strings.TrimSpace(secondPart[0])
     nameList := strings.Split(fontNames, ",")
 

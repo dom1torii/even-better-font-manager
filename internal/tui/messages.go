@@ -7,5 +7,6 @@ import (
 type csPathMsg string
 
 type pathConfirmedMsg struct{}
+type fontPreviewMsg struct{}
 
 type systemFontsMsg []systemfonts.SystemFont

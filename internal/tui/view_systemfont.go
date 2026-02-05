@@ -58,6 +58,8 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
       if m.systemFont.selection < numItems-1 {
         m.systemFont.selection++
       }
+    case "p":
+    	return m, m.previewFont()
     case "q", "esc":
     	m.state = stateFonts
       return m, nil
