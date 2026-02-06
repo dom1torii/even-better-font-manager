@@ -10,14 +10,14 @@ import (
 	"github.com/muesli/reflow/truncate"
 	"github.com/charmbracelet/bubbles/textinput"
 
-	"github.com/dom1torii/even-better-font-manager/internal/platform/systemfonts"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 type systemFontModel struct {
 	selection     int
 	startRow      int
-	fonts         []systemfonts.SystemFont
-	filteredFonts []systemfonts.SystemFont
+	fonts         []fonts.SystemFont
+	filteredFonts []fonts.SystemFont
 	searchInput   textinput.Model
 }
 
@@ -127,7 +127,7 @@ func (m *model) filterFonts() {
   if value == "" {
     m.systemFont.filteredFonts = m.systemFont.fonts
   } else {
-    var filtered []systemfonts.SystemFont
+    var filtered []fonts.SystemFont
     for _, f := range m.systemFont.fonts {
       if strings.Contains(strings.ToLower(f.Name), value) {
         filtered = append(filtered, f)

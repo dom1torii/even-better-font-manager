@@ -1,6 +1,6 @@
 //go:build linux
 
-package systemfonts
+package fonts
 
 import (
 	"log"
@@ -14,7 +14,7 @@ type SystemFont struct {
 	Name string
 }
 
-func GetFonts() []SystemFont {
+func GetSystemFonts() []SystemFont {
 	cmd := exec.Command("fc-list")
 	output, err := cmd.Output()
   if err != nil {
@@ -53,4 +53,11 @@ func GetFonts() []SystemFont {
   })
 
   return fonts
+}
+
+func Preview(path string) {
+	cmd := exec.Command("fontforge", path)
+	if err := cmd.Run(); err != nil {
+		log.Println("Failed to open fontforge", err)
+	}
 }
