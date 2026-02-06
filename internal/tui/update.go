@@ -38,6 +38,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m.updateFontSelection(msg)
 		case stateSystemFont:
 			return m.updateSystemFontSelection(msg)
+		case stateCustomFont:
+			return m.updateCustomFontSelection(msg)
 		}
 	}
 

@@ -48,6 +48,7 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter", " ":
 			if m.fonts.colActive == 1 && m.fonts.rightSelection == 0 {
+				m.state = stateCustomFont
 				return m, nil
 			}
 			if m.fonts.colActive == 1 && m.fonts.rightSelection == 1 {

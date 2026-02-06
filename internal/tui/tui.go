@@ -24,6 +24,7 @@ const (
 	stateStart
 	stateFonts
 	stateSystemFont
+	stateCustomFont
 )
 
 type model struct {
@@ -36,6 +37,7 @@ type model struct {
 	start      startModel
 	fonts      fontsModel
 	systemFont systemFontModel
+	customFont customFontModel
 
 	csPath     string
 	chosenFont chosenFont
@@ -68,6 +70,16 @@ func InitialModel(cfg *config.Config) *model {
 	si.PromptStyle = lipgloss.NewStyle()
 	si.PlaceholderStyle = inputStyle
 
+	// rename this or make input creation better later idk
+	pi2 := textinput.New()
+	pi2.Placeholder = "/path/to/font"
+	pi2.Blur()
+	pi2.Prompt = "Path: "
+	pi2.CharLimit = 156
+	pi2.Width = 20
+	pi2.PromptStyle = lipgloss.NewStyle()
+	pi2.PlaceholderStyle = inputStyle
+
 	initialState := stateStart
 	if cfg.General.CS2Path == "" {
 		initialState = statePath
@@ -91,6 +103,10 @@ func InitialModel(cfg *config.Config) *model {
 		systemFont: systemFontModel{
 			selection: 0,
 			searchInput: si,
+		},
+		customFont: customFontModel{
+			selection: 0,
+			pathInput: pi2,
 		},
 
 		Quitting: false,
