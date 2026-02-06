@@ -37,6 +37,7 @@ func GetSystemFonts() []SystemFont {
     // so we use last one since it usually describes font the best
     // EDIT: i need to do something else since sometimes it has the same name
     // for multiple fonts of different weight, example Noto Sans
+    // EDIT2: maybe just append whatever is after style=?
     fontNames := strings.TrimSpace(secondPart[0])
     nameList := strings.Split(fontNames, ",")
 
