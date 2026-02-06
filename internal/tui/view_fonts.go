@@ -7,13 +7,16 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 	"github.com/muesli/reflow/truncate"
+
+	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 type fontsModel struct {
-	colActive int
-	leftSelection   int
-	rightSelection  int
-	startRow  int
+	colActive      int
+	leftSelection  int
+	rightSelection int
+	startRow       int
+	fontCollection []fonts.SystemFont
 }
 
 func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {

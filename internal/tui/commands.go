@@ -23,9 +23,9 @@ func (m *model) detectCsPath() tea.Cmd {
 	}
 }
 
-func (m *model) chooseCsPath() tea.Cmd {
+func (m *model) chooseCsPath(title string) tea.Cmd {
 	return func() tea.Msg {
-		path := filechooser.ChoosePath()
+		path := filechooser.Open("directory", title)
 		return csPathMsg(path)
 	}
 }
@@ -56,5 +56,22 @@ func (m *model) previewFont() tea.Cmd {
 	return func() tea.Msg {
 		fonts.Preview(m.systemFont.filteredFonts[m.systemFont.selection].Path)
 		return fontPreviewMsg{}
+	}
+}
+
+func (m *model) chooseCustomFontPath(title string) tea.Cmd {
+	return func() tea.Msg {
+		path := filechooser.Open("", title)
+		return customFontPathMsg(path)
+	}
+}
+
+func (m *model) getCustomFontName(path string) tea.Cmd {
+	return func() tea.Msg {
+		fontName, err := fonts.GetName(path)
+		if err != nil {
+			return customFontMsg{Name: fontName, Path: path, Error: err}
+		}
+		return customFontMsg{Name: fontName, Path: path, Error: nil}
 	}
 }

@@ -4,9 +4,12 @@ package fonts
 
 import (
 	"log"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
+
+	"golang.org/x/image/font/sfnt"
 )
 
 type SystemFont struct {
@@ -61,4 +64,28 @@ func Preview(path string) {
 	if err := cmd.Run(); err != nil {
 		log.Println("Failed to open fontforge", err)
 	}
+}
+
+func GetName(path string) (string, error) {
+	if path == "" {
+		return "", nil
+	}
+
+	fontBytes, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	f, err := sfnt.Parse(fontBytes)
+	if err != nil {
+		log.Fatalln("Failed to parse font: ", err)
+	}
+
+	name, err := f.Name(nil, sfnt.NameIDFull)
+	if err != nil {
+		log.Fatalln("Failed to find font name: ", err)
+	}
+
+	log.Println(name)
+	return name, nil
 }

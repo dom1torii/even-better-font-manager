@@ -9,11 +9,11 @@ import (
 )
 
 // dependency: zenity
-func ChoosePath() string {
+func Open(chooserType string, title string) string {
 	cmd := exec.Command("zenity",
 		"--file-selection",
-		"--directory",
-		"--title=Choose your Counter-Strike Global Offensive/ folder")
+		"--"+chooserType,
+		"--title="+title)
 	output, err := cmd.Output()
 	if err != nil {
 		log.Println("File chooser was closed or zenity failed: ", err)

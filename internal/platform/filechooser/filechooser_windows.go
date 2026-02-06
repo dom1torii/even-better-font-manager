@@ -2,6 +2,6 @@
 
 package filechooser
 
-func ChoosePath() string {
+func Open(chooserType string, title string) string {
 	return "placeholder"
 }

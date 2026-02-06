@@ -10,6 +10,18 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 
+	case customFontPathMsg:
+		return m, m.getCustomFontName(string(msg))
+
+	case customFontMsg:
+		m.customFont.chosenFont = chosenCustomFont{
+			Name: msg.Name,
+			Path: msg.Path,
+			Error: msg.Error,
+		}
+		return m, nil
+
+
 	case systemFontsMsg:
 		m.systemFont.fonts = msg
 		m.systemFont.filteredFonts = msg

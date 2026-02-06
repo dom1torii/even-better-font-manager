@@ -69,7 +69,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.path.pathInput.Focus()
 			}
 			if m.path.selection == 1 {
-				return m, m.chooseCsPath()
+				return m, m.chooseCsPath("Choose your Counter-Strike Global Offensive/ folder")
 			}
 			if m.path.selection == 2 {
 				return m, m.detectCsPath()

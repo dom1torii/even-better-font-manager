@@ -13,6 +13,13 @@ import (
 type customFontModel struct {
 	selection int
 	pathInput textinput.Model
+	chosenFont chosenCustomFont
+}
+
+type chosenCustomFont struct {
+	Name  string
+	Path  string
+	Error error
 }
 
 func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -69,7 +76,7 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.customFont.pathInput.Focus()
 			}
 			if m.customFont.selection == 1 {
-				return m, m.chooseCsPath()
+				return m, m.chooseCustomFontPath("Choose custom font to add")
 			}
 			if m.customFont.selection == 2 {
 				return m, m.detectCsPath()
@@ -106,8 +113,13 @@ func (m *model) customFontView() string {
 		customFontChoices = append(customFontChoices, row)
 
 		if i == 3 {
-			status := fmt.Sprintf("    Chosen font: %s", "*font name*")
+			status := fmt.Sprintf("    Chosen font: %s", m.customFont.chosenFont.Name)
 			customFontChoices = append(customFontChoices, statusStyle.Render(status))
+		}
+
+		if i == 1 {
+			status := fmt.Sprintf("    Error: %s", m.customFont.chosenFont.Error)
+			customFontChoices = append(customFontChoices, statusWarningStyle.Render(status))
 		}
 	}
 

@@ -18,3 +18,7 @@ func GetSystemFonts() {
 func Preview(path string) {
 
 }
+
+func GetName(path string) (string, error) {
+	return "", nil
+}
