@@ -14,8 +14,8 @@ import (
 )
 
 type SystemFont struct {
-	Path string
 	Name string
+	Path string
 }
 
 func GetSystemFonts() []SystemFont {
@@ -48,8 +48,8 @@ func GetSystemFonts() []SystemFont {
     finalName := strings.TrimSpace(nameList[len(nameList)-1])
 
     fonts = append(fonts, SystemFont{
+    	Name: finalName,
       Path: path,
-      Name: finalName,
     })
   }
 
