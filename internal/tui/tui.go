@@ -53,34 +53,11 @@ type chosenFont struct {
 }
 
 func InitialModel(cfg *config.Config) *model {
-	pi := textinput.New()
-	pi.Placeholder = "/path/to/cs2/"
-	pi.Blur()
-	pi.Prompt = "Path: "
-	pi.CharLimit = 156
-	pi.Width = 20
-	pi.PromptStyle = lipgloss.NewStyle()
-	pi.PlaceholderStyle = inputStyle
+	cs2PathInput := createInput("/path/to/cs2/", "Path: ", 20)
+	systemFontSearchInput := createInput("font name", "Search: ", 50)
+	customFontPathInput := createInput("/path/to/font", "Path: ", 20)
 
-	si := textinput.New()
-	si.Placeholder = "font name"
-	si.Blur()
-	si.Prompt = "Search: "
-	si.CharLimit = 156
-	si.Width = 50
-	si.PromptStyle = lipgloss.NewStyle()
-	si.PlaceholderStyle = inputStyle
-
-	// rename this or make input creation better later idk
-	pi2 := textinput.New()
-	pi2.Placeholder = "/path/to/font"
-	pi2.Blur()
-	pi2.Prompt = "Path: "
-	pi2.CharLimit = 156
-	pi2.Width = 20
-	pi2.PromptStyle = lipgloss.NewStyle()
-	pi2.PlaceholderStyle = inputStyle
-
+	// if don't have cs2 path set in the config, start with path chooser state
 	initialState := stateStart
 	if cfg.General.CS2Path == "" {
 		initialState = statePath
@@ -89,10 +66,9 @@ func InitialModel(cfg *config.Config) *model {
 	return &model{
 		cfg: cfg,
 		state: initialState,
-
 		path: pathModel{
 			selection: 0,
-			pathInput: pi,
+			pathInput: cs2PathInput,
 		},
 		start: startModel{
 			selection: 0,
@@ -103,13 +79,25 @@ func InitialModel(cfg *config.Config) *model {
 		},
 		systemFont: systemFontModel{
 			selection: 0,
-			searchInput: si,
+			searchInput: systemFontSearchInput,
 		},
 		customFont: customFontModel{
 			selection: 0,
-			pathInput: pi2,
+			pathInput: customFontPathInput,
 		},
-
 		Quitting: false,
 	}
+}
+
+func createInput(placeholder, prompt string, width int) textinput.Model {
+  ti := textinput.New()
+  ti.Placeholder = placeholder
+  ti.Prompt = prompt
+  ti.Width = width
+  ti.CharLimit = 156
+  ti.Blur()
+  ti.PromptStyle = lipgloss.NewStyle()
+  ti.PlaceholderStyle = inputStyle
+
+  return ti
 }
