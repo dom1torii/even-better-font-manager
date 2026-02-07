@@ -49,6 +49,7 @@ type model struct {
 type chosenFont struct {
 	Name string
 	Path string
+	Error error
 }
 
 func InitialModel(cfg *config.Config) *model {

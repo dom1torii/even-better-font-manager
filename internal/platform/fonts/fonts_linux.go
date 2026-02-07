@@ -3,6 +3,7 @@
 package fonts
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -68,7 +69,7 @@ func Preview(path string) {
 
 func GetName(path string) (string, error) {
 	if path == "" {
-		return "", nil
+		return "", fmt.Errorf("No path provided")
 	}
 
 	fontBytes, err := os.ReadFile(path)
@@ -78,12 +79,12 @@ func GetName(path string) (string, error) {
 
 	f, err := sfnt.Parse(fontBytes)
 	if err != nil {
-		log.Fatalln("Failed to parse font: ", err)
+		return "", err
 	}
 
 	name, err := f.Name(nil, sfnt.NameIDFull)
 	if err != nil {
-		log.Fatalln("Failed to find font name: ", err)
+		return "", err
 	}
 
 	log.Println(name)

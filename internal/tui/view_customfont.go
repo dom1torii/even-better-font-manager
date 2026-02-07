@@ -13,17 +13,10 @@ import (
 type customFontModel struct {
 	selection int
 	pathInput textinput.Model
-	chosenFont chosenCustomFont
-}
-
-type chosenCustomFont struct {
-	Name  string
-	Path  string
-	Error error
+	chosenFont chosenFont
 }
 
 func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
-
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// keypresses inside focused input
@@ -113,11 +106,11 @@ func (m *model) customFontView() string {
 		customFontChoices = append(customFontChoices, row)
 
 		if i == 3 {
-			status := fmt.Sprintf("    Chosen font: %s", m.customFont.chosenFont.Name)
+			status := fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name)
 			customFontChoices = append(customFontChoices, statusStyle.Render(status))
 		}
 
-		if i == 1 {
+		if i == 1 && m.customFont.chosenFont.Error != nil {
 			status := fmt.Sprintf("    Error: %s", m.customFont.chosenFont.Error)
 			customFontChoices = append(customFontChoices, statusWarningStyle.Render(status))
 		}
