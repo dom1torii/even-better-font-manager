@@ -14,7 +14,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, m.getCustomFontName(string(msg))
 
 	case customFontMsg:
-		m.customFont.chosenFont = chosenFont(msg)
+		m.customFont.chosenFont = font(msg)
 		return m, nil
 
 

@@ -13,7 +13,7 @@ import (
 type customFontModel struct {
 	selection int
 	pathInput textinput.Model
-	chosenFont chosenFont
+	chosenFont font
 }
 
 func initialCustomFontModel() customFontModel {

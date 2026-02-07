@@ -40,13 +40,13 @@ type model struct {
 	customFont customFontModel
 
 	csPath     string
-	chosenFont chosenFont
+	chosenFont font
 
 	Err      error
 	Quitting bool
 }
 
-type chosenFont struct {
+type font struct {
 	Name string
 	Path string
 	Error error
