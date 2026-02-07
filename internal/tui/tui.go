@@ -15,6 +15,7 @@ var (
 	statusWarningStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
 	helpStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingLeft(4).PaddingBottom(1)
 	inputStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("0")).Italic(true)
+	emptyListSignStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("0"))
 )
 
 type sessionState int

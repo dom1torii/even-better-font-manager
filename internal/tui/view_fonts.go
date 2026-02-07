@@ -7,8 +7,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
 	"github.com/muesli/reflow/truncate"
-
-	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 type fontsModel struct {
@@ -16,7 +14,7 @@ type fontsModel struct {
 	leftSelection  int
 	rightSelection int
 	startRow       int
-	fontCollection []fonts.SystemFont
+	fontCollection []font
 }
 
 func initialFontsModel() fontsModel {
@@ -87,12 +85,20 @@ func (m *model) fontsView() string {
 	leftWidth := max(min(m.width-30, 40), 20)
 
 	var leftChoices []string
-	start := m.fonts.startRow
-	end := min(start+maxViewHeight, len(fontItemsTemp))
-	for i := start; i < end; i++ {
-		isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-		leftChoices = append(leftChoices, fontItem(fontItemsTemp[i], isSelected, leftWidth-4))
+	if len(m.fonts.fontCollection) == 0 {
+		emptySign := emptyListSignStyle.Render("No fonts added yet. Add them using options on the right")
+		leftChoices = append(leftChoices, emptySign)
+		m.fonts.colActive = 1
+	} else {
+		start := m.fonts.startRow
+		end := min(start+maxViewHeight, len(m.fonts.fontCollection))
+		for i := start; i < end; i++ {
+			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
+			leftChoices = append(leftChoices, fontItem(m.fonts.fontCollection[i].Name, isSelected, leftWidth-4))
+		}
 	}
+
+
 
 	var rightChoices []string
 	for i, label := range fontItems {

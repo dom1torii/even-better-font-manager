@@ -73,11 +73,18 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
     case "f":
     	return m, m.systemFont.searchInput.Focus()
     case "enter", " ":
-   		m.chosenFont = font{
-        Name: m.systemFont.filteredFonts[m.systemFont.selection].Name,
-        Path: m.systemFont.filteredFonts[m.systemFont.selection].Path,
+    	if len(m.systemFont.filteredFonts) > 0 {
+     		selectedFont := m.systemFont.filteredFonts[m.systemFont.selection]
+       	// we need to create a new font because systemFont struct doesn't have
+        // an error so it won't let us to append it into the collection
+       	newFont := font{
+       		Name: selectedFont.Name,
+        	Path: selectedFont.Path,
+        	Error: nil,
+        }
+        m.fonts.fontCollection = append(m.fonts.fontCollection, newFont)
       }
-     	m.state = stateStart
+     	m.state = stateFonts
     	return m, nil
     }
 
