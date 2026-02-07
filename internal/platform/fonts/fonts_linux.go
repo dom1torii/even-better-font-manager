@@ -21,43 +21,43 @@ type SystemFont struct {
 func GetSystemFonts() []SystemFont {
 	cmd := exec.Command("fc-list")
 	output, err := cmd.Output()
-  if err != nil {
-    log.Fatalln("Failed to run fc-list: ", err)
-  }
+	if err != nil {
+		log.Fatalln("Failed to run fc-list: ", err)
+	}
 
-  lines := strings.Split(string(output), "\n")
+	lines := strings.Split(string(output), "\n")
 
-  var fonts []SystemFont
-  for _, line := range lines {
- 		if strings.TrimSpace(line) == "" {
-      continue
-    }
+	var fonts []SystemFont
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
 
- 		parts := strings.SplitN(line, ":", 2)
-   	path := strings.TrimSpace(parts[0])
-    secondPart := strings.Split(parts[1], ":")
+		parts := strings.SplitN(line, ":", 2)
+		path := strings.TrimSpace(parts[0])
+		secondPart := strings.Split(parts[1], ":")
 
-    // one font (for some reason) can have multiple names separated my comma,
-    // so we use last one since it usually describes font the best
-    // EDIT: i need to do something else since sometimes it has the same name
-    // for multiple fonts of different weight, example Noto Sans
-    // EDIT2: maybe just append whatever is after style=?
-    fontNames := strings.TrimSpace(secondPart[0])
-    nameList := strings.Split(fontNames, ",")
+		// one font (for some reason) can have multiple names separated my comma,
+		// so we use last one since it usually describes font the best
+		// EDIT: i need to do something else since sometimes it has the same name
+		// for multiple fonts of different weight, example Noto Sans
+		// EDIT2: maybe just append whatever is after style=?
+		fontNames := strings.TrimSpace(secondPart[0])
+		nameList := strings.Split(fontNames, ",")
 
-    finalName := strings.TrimSpace(nameList[len(nameList)-1])
+		finalName := strings.TrimSpace(nameList[len(nameList)-1])
 
-    fonts = append(fonts, SystemFont{
-    	Name: finalName,
-      Path: path,
-    })
-  }
+		fonts = append(fonts, SystemFont{
+			Name: finalName,
+			Path: path,
+		})
+	}
 
-  sort.SliceStable(fonts, func(i, j int) bool {
-    return strings.ToLower(fonts[i].Name) < strings.ToLower(fonts[j].Name)
-  })
+	sort.SliceStable(fonts, func(i, j int) bool {
+		return strings.ToLower(fonts[i].Name) < strings.ToLower(fonts[j].Name)
+	})
 
-  return fonts
+	return fonts
 }
 
 func Preview(path string) {

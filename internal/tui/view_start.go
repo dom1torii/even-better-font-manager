@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
-	tea "github.com/charmbracelet/bubbletea"
 )
 
 type startModel struct {

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/charmbracelet/bubbles/textinput"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/bubbles/textinput"
 )
 
 type customFontModel struct {
-	selection int
-	pathInput textinput.Model
+	selection  int
+	pathInput  textinput.Model
 	chosenFont font
 }
 
@@ -82,7 +82,7 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.detectCsPath()
 			}
 			if m.customFont.selection == 3 {
-			  m.fonts.fontCollection = append(m.fonts.fontCollection, m.customFont.chosenFont)
+				m.fonts.fontCollection = append(m.fonts.fontCollection, m.customFont.chosenFont)
 				m.state = stateFonts
 				return m, nil
 			}

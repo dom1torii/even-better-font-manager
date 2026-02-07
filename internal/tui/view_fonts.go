@@ -5,8 +5,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/muesli/reflow/wordwrap"
 	"github.com/muesli/reflow/truncate"
+	"github.com/muesli/reflow/wordwrap"
 )
 
 type fontsModel struct {
@@ -19,7 +19,7 @@ type fontsModel struct {
 
 func initialFontsModel() fontsModel {
 	return fontsModel{
-		leftSelection: 0,
+		leftSelection:  0,
 		rightSelection: 0,
 	}
 }
@@ -98,8 +98,6 @@ func (m *model) fontsView() string {
 		}
 	}
 
-
-
 	var rightChoices []string
 	for i, label := range fontItems {
 		isSelected := (m.fonts.colActive == 1 && m.fonts.rightSelection == i)
@@ -158,7 +156,7 @@ func fontItem(label string, isSelected bool, width int) string {
 	truncated := label
 	if width > 0 {
 		truncated = truncate.StringWithTail(label, uint(width), "...")
-  }
+	}
 	if isSelected {
 		return selectionStyle.Render(truncated)
 	}

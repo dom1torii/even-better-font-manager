@@ -117,12 +117,12 @@ func (cfg *Config) Apply() {
 	configFile := filepath.Join(configDir, "config.toml")
 
 	f, err := os.Create(configFile)
-  if err != nil {
-  	log.Fatalln("Failed to create config file: ", err)
-  }
-  defer f.Close()
+	if err != nil {
+		log.Fatalln("Failed to create config file: ", err)
+	}
+	defer f.Close()
 
-  if err := toml.NewEncoder(f).Encode(cfg); err != nil {
-  	log.Fatalln("Failed to encode toml: ", err)
-  }
+	if err := toml.NewEncoder(f).Encode(cfg); err != nil {
+		log.Fatalln("Failed to encode toml: ", err)
+	}
 }

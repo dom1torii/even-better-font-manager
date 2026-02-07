@@ -31,11 +31,11 @@ func (m *model) chooseCsPath(title string) tea.Cmd {
 }
 
 func (m *model) confirmCsPath() tea.Cmd {
-  return func() tea.Msg {
-    m.cfg.General.CS2Path = m.csPath
-    m.cfg.Apply()
-    return pathConfirmedMsg{}
-  }
+	return func() tea.Msg {
+		m.cfg.General.CS2Path = m.csPath
+		m.cfg.Apply()
+		return pathConfirmedMsg{}
+	}
 }
 
 func (m *model) getCsPath() tea.Cmd {

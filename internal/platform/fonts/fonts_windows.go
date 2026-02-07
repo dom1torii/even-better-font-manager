@@ -2,9 +2,7 @@
 
 package fonts
 
-import (
-
-)
+import ()
 
 type SystemFont struct {
 	Path string

@@ -17,7 +17,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.customFont.chosenFont = font(msg)
 		return m, nil
 
-
 	case systemFontsMsg:
 		m.systemFont.fonts = msg
 		m.systemFont.filteredFonts = msg

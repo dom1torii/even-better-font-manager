@@ -8,14 +8,14 @@ import (
 )
 
 var (
-	selectionStyle        = lipgloss.NewStyle().Background(lipgloss.Color("8"))
-	titleStyle            = lipgloss.NewStyle().MarginLeft(2).Bold(true)
-	statusStyle           = lipgloss.NewStyle().Foreground(lipgloss.Color("3"))
-	statusOkStyle         = lipgloss.NewStyle().Foreground(lipgloss.Color("2"))
-	statusWarningStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
-	helpStyle             = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingLeft(4).PaddingBottom(1)
-	inputStyle            = lipgloss.NewStyle().Foreground(lipgloss.Color("0")).Italic(true)
-	emptyListSignStyle    = lipgloss.NewStyle().Foreground(lipgloss.Color("0"))
+	selectionStyle     = lipgloss.NewStyle().Background(lipgloss.Color("8"))
+	titleStyle         = lipgloss.NewStyle().MarginLeft(2).Bold(true)
+	statusStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("3"))
+	statusOkStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("2"))
+	statusWarningStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("1"))
+	helpStyle          = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingLeft(4).PaddingBottom(1)
+	inputStyle         = lipgloss.NewStyle().Foreground(lipgloss.Color("0")).Italic(true)
+	emptyListSignStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("0"))
 )
 
 type sessionState int
@@ -48,8 +48,8 @@ type model struct {
 }
 
 type font struct {
-	Name string
-	Path string
+	Name  string
+	Path  string
 	Error error
 }
 
@@ -61,26 +61,26 @@ func InitialModel(cfg *config.Config) *model {
 	}
 
 	return &model{
-		cfg: cfg,
-		state: initialState,
-		path: initialPathModel(),
-		start: initialStartModel(),
-		fonts: initialFontsModel(),
+		cfg:        cfg,
+		state:      initialState,
+		path:       initialPathModel(),
+		start:      initialStartModel(),
+		fonts:      initialFontsModel(),
 		systemFont: initialSystemFontModel(),
 		customFont: initialCustomFontModel(),
-		Quitting: false,
+		Quitting:   false,
 	}
 }
 
 func createInput(placeholder, prompt string, width int) textinput.Model {
-  ti := textinput.New()
-  ti.Placeholder = placeholder
-  ti.Prompt = prompt
-  ti.Width = width
-  ti.CharLimit = 156
-  ti.Blur()
-  ti.PromptStyle = lipgloss.NewStyle()
-  ti.PlaceholderStyle = inputStyle
+	ti := textinput.New()
+	ti.Placeholder = placeholder
+	ti.Prompt = prompt
+	ti.Width = width
+	ti.CharLimit = 156
+	ti.Blur()
+	ti.PromptStyle = lipgloss.NewStyle()
+	ti.PlaceholderStyle = inputStyle
 
-  return ti
+	return ti
 }
