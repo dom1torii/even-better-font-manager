@@ -19,6 +19,13 @@ type fontsModel struct {
 	fontCollection []fonts.SystemFont
 }
 
+func initialFontsModel() fontsModel {
+	return fontsModel{
+		leftSelection: 0,
+		rightSelection: 0,
+	}
+}
+
 func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	maxViewHeight := 10
 

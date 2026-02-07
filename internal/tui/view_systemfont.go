@@ -21,6 +21,13 @@ type systemFontModel struct {
 	searchInput   textinput.Model
 }
 
+func initialSystemFontModel() systemFontModel {
+	return systemFontModel{
+		selection: 0,
+		searchInput: createInput("font name", "Search: ", 50),
+	}
+}
+
 func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
   maxViewHeight := 12
   numItems := len(m.systemFont.filteredFonts)

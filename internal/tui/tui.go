@@ -53,10 +53,6 @@ type chosenFont struct {
 }
 
 func InitialModel(cfg *config.Config) *model {
-	cs2PathInput := createInput("/path/to/cs2/", "Path: ", 20)
-	systemFontSearchInput := createInput("font name", "Search: ", 50)
-	customFontPathInput := createInput("/path/to/font", "Path: ", 20)
-
 	// if don't have cs2 path set in the config, start with path chooser state
 	initialState := stateStart
 	if cfg.General.CS2Path == "" {
@@ -66,25 +62,11 @@ func InitialModel(cfg *config.Config) *model {
 	return &model{
 		cfg: cfg,
 		state: initialState,
-		path: pathModel{
-			selection: 0,
-			pathInput: cs2PathInput,
-		},
-		start: startModel{
-			selection: 0,
-		},
-		fonts: fontsModel{
-			leftSelection: 0,
-			rightSelection: 0,
-		},
-		systemFont: systemFontModel{
-			selection: 0,
-			searchInput: systemFontSearchInput,
-		},
-		customFont: customFontModel{
-			selection: 0,
-			pathInput: customFontPathInput,
-		},
+		path: initialPathModel(),
+		start: initialStartModel(),
+		fonts: initialFontsModel(),
+		systemFont: initialSystemFontModel(),
+		customFont: initialCustomFontModel(),
 		Quitting: false,
 	}
 }

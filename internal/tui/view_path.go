@@ -15,8 +15,14 @@ type pathModel struct {
 	pathInput textinput.Model
 }
 
-func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
+func initialPathModel() pathModel {
+	return pathModel{
+		selection: 0,
+		pathInput: createInput("/path/to/cs2/", "Path: ", 20),
+	}
+}
 
+func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		// keypresses inside focused input

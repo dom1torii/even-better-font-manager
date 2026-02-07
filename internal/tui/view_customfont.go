@@ -16,6 +16,13 @@ type customFontModel struct {
 	chosenFont chosenFont
 }
 
+func initialCustomFontModel() customFontModel {
+	return customFontModel{
+		selection: 0,
+		pathInput: createInput("/path/to/font", "Path: ", 20),
+	}
+}
+
 func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:

@@ -13,6 +13,12 @@ type startModel struct {
 	selection int
 }
 
+func initialStartModel() startModel {
+	return startModel{
+		selection: 0,
+	}
+}
+
 func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
