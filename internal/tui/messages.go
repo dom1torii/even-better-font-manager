@@ -12,8 +12,4 @@ type fontPreviewMsg struct{}
 type systemFontsMsg []fonts.SystemFont
 
 type customFontPathMsg string
-type customFontMsg struct {
-	Name string
-	Path string
-	Error error
-}
+type customFontMsg chosenFont
