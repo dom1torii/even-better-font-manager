@@ -187,11 +187,13 @@ func (c *Collection) List() []Font {
 }
 
 func (c *Collection) Add(f Font) {
+	// dont add if already exists
   for _, existing := range c.Fonts {
     if existing.Path == f.Path {
       return
     }
   }
+
   c.Fonts = append(c.Fonts, f)
   c.Save()
 }
