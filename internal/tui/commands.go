@@ -3,6 +3,7 @@ package tui
 import (
 	tea "github.com/charmbracelet/bubbletea"
 
+	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -12,6 +13,7 @@ func (m *model) Init() tea.Cmd {
 	return tea.Batch(
 		m.getCsPath(),
 		m.getSystemFonts(),
+		m.loadFontCollection(),
 		tea.SetWindowTitle("Even Better Font Manager"),
 	)
 }
@@ -33,7 +35,7 @@ func (m *model) chooseCsPath(title string) tea.Cmd {
 func (m *model) confirmCsPath() tea.Cmd {
 	return func() tea.Msg {
 		m.cfg.General.CS2Path = m.csPath
-		m.cfg.Apply()
+		m.cfg.Save()
 		return pathConfirmedMsg{}
 	}
 }
@@ -70,8 +72,26 @@ func (m *model) getCustomFontName(path string) tea.Cmd {
 	return func() tea.Msg {
 		fontName, err := fonts.GetName(path)
 		if err != nil {
-			return customFontMsg{Name: fontName, Path: path, Error: err}
+			return customFontMsg{
+			  Font: config.Font{
+			    Name: fontName,
+			    Path: path,
+			  },
+			  Error: err,
+			}
 		}
-		return customFontMsg{Name: fontName, Path: path, Error: nil}
+		return customFontMsg{
+		  Font: config.Font{
+		    Name: fontName,
+		    Path: path,
+		  },
+		  Error: nil,
+		}
+	}
+}
+
+func (m *model) loadFontCollection() tea.Cmd {
+	return func() tea.Msg {
+		return fontCollectionMsg(config.LoadCollection())
 	}
 }

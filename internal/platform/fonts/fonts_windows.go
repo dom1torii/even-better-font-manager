@@ -4,11 +4,6 @@ package fonts
 
 import ()
 
-type SystemFont struct {
-	Path string
-	Name string
-}
-
 func GetSystemFonts() {
 
 }

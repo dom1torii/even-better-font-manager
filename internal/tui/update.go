@@ -22,6 +22,9 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.systemFont.filteredFonts = msg
 		return m, nil
 
+	case fontCollectionMsg:
+		m.fonts.collection = msg
+
 	case csPathMsg:
 		m.csPath = string(msg)
 		return m, nil

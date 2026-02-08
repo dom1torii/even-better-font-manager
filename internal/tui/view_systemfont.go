@@ -10,14 +10,14 @@ import (
 	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
 
-	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
+	"github.com/dom1torii/even-better-font-manager/internal/config"
 )
 
 type systemFontModel struct {
 	selection     int
 	startRow      int
-	fonts         []fonts.SystemFont
-	filteredFonts []fonts.SystemFont
+	fonts         []config.Font
+	filteredFonts []config.Font
 	searchInput   textinput.Model
 }
 
@@ -74,17 +74,10 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, m.systemFont.searchInput.Focus()
 		case "enter", " ":
 			if len(m.systemFont.filteredFonts) > 0 {
-				selectedFont := m.systemFont.filteredFonts[m.systemFont.selection]
-				// we need to create a new font because systemFont struct doesn't have
-				// an error so it won't let us to append it into the collection
-				newFont := font{
-					Name:  selectedFont.Name,
-					Path:  selectedFont.Path,
-					Error: nil,
-				}
-				m.fonts.fontCollection = append(m.fonts.fontCollection, newFont)
+			  selected := m.systemFont.filteredFonts[m.systemFont.selection]
+			  m.fonts.collection.Add(selected)
+			  m.state = stateFonts
 			}
-			m.state = stateFonts
 			return m, nil
 		}
 
@@ -141,7 +134,7 @@ func (m *model) filterFonts() {
 	if value == "" {
 		m.systemFont.filteredFonts = m.systemFont.fonts
 	} else {
-		var filtered []fonts.SystemFont
+		var filtered []config.Font
 		for _, f := range m.systemFont.fonts {
 			if strings.Contains(strings.ToLower(f.Name), value) {
 				filtered = append(filtered, f)

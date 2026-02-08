@@ -48,8 +48,7 @@ type model struct {
 }
 
 type font struct {
-	Name  string
-	Path  string
+	config.Font
 	Error error
 }
 

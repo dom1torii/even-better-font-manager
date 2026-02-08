@@ -10,15 +10,13 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"golang.org/x/image/font/sfnt"
 )
 
-type SystemFont struct {
-	Name string
-	Path string
-}
 
-func GetSystemFonts() []SystemFont {
+
+func GetSystemFonts() []config.Font {
 	cmd := exec.Command("fc-list")
 	output, err := cmd.Output()
 	if err != nil {
@@ -27,7 +25,7 @@ func GetSystemFonts() []SystemFont {
 
 	lines := strings.Split(string(output), "\n")
 
-	var fonts []SystemFont
+	var fonts []config.Font
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
 			continue
@@ -47,7 +45,7 @@ func GetSystemFonts() []SystemFont {
 
 		finalName := strings.TrimSpace(nameList[len(nameList)-1])
 
-		fonts = append(fonts, SystemFont{
+		fonts = append(fonts, config.Font{
 			Name: finalName,
 			Path: path,
 		})

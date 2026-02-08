@@ -5,6 +5,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
 )
@@ -14,7 +15,7 @@ type fontsModel struct {
 	leftSelection  int
 	rightSelection int
 	startRow       int
-	fontCollection []font
+	collection     *config.Collection
 }
 
 func initialFontsModel() fontsModel {
@@ -38,7 +39,7 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "j", "down":
-			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(fontItemsTemp)-1 {
+			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(m.fonts.collection.List())-1 {
 				m.fonts.leftSelection++
 			} else if m.fonts.colActive == 1 && m.fonts.rightSelection < len(fontItems)-1 {
 				m.fonts.rightSelection++
@@ -64,6 +65,9 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
+		case "d":
+			m.fonts.collection.Remove(m.fonts.leftSelection)
+
 		case "q", "esc":
 			return m, tea.Quit
 		}
@@ -85,16 +89,16 @@ func (m *model) fontsView() string {
 	leftWidth := max(min(m.width-30, 40), 20)
 
 	var leftChoices []string
-	if len(m.fonts.fontCollection) == 0 {
+	if len(m.fonts.collection.List()) == 0 {
 		emptySign := emptyListSignStyle.Render("No fonts added yet. Add them using options on the right")
 		leftChoices = append(leftChoices, emptySign)
 		m.fonts.colActive = 1
 	} else {
 		start := m.fonts.startRow
-		end := min(start+maxViewHeight, len(m.fonts.fontCollection))
+		end := min(start+maxViewHeight, len(m.fonts.collection.List()))
 		for i := start; i < end; i++ {
 			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-			leftChoices = append(leftChoices, fontItem(m.fonts.fontCollection[i].Name, isSelected, leftWidth-4))
+			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name, isSelected, leftWidth-4))
 		}
 	}
 
@@ -134,22 +138,6 @@ func (m *model) fontsView() string {
 var fontItems = []string{
 	"(1) Custom",
 	"(2) From system",
-}
-
-// temporary for testing
-var fontItemsTemp = []string{
-	"Font 1dsadasdasadsasdadsdasdas",
-	"Font 2",
-	"Font 3",
-	"Font 4",
-	"Font 5",
-	"Font 6",
-	"Font 7",
-	"Font 8",
-	"Font 9",
-	"Font 10",
-	"Font 11",
-	"Font 12",
 }
 
 func fontItem(label string, isSelected bool, width int) string {

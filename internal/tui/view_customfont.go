@@ -82,9 +82,9 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.detectCsPath()
 			}
 			if m.customFont.selection == 3 {
-				m.fonts.fontCollection = append(m.fonts.fontCollection, m.customFont.chosenFont)
-				m.state = stateFonts
-				return m, nil
+			  m.fonts.collection.Add(m.customFont.chosenFont.Font)
+			  m.state = stateFonts
+			  return m, nil
 			}
 		case "i":
 			if m.customFont.selection == 0 {
