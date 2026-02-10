@@ -13,6 +13,7 @@ import (
 type pathModel struct {
 	selection int
 	pathInput textinput.Model
+	chosenPath string
 }
 
 func initialPathModel() pathModel {
@@ -30,7 +31,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch msg.String() {
 			case "enter":
 				m.path.pathInput.Blur()
-				m.csPath = m.path.pathInput.Value()
+				m.path.chosenPath = m.path.pathInput.Value()
 				return m, nil
 			case "esc":
 				m.path.pathInput.Blur()
@@ -81,6 +82,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.detectCsPath()
 			}
 			if m.path.selection == 3 {
+				m.csPath = m.path.chosenPath
 				m.state = stateStart
 				return m, m.confirmCsPath()
 			}
@@ -112,7 +114,7 @@ func (m *model) pathView() string {
 		pathChoices = append(pathChoices, row)
 
 		if i == 3 {
-			status := fmt.Sprintf("    Chosen path: %s", m.csPath)
+			status := fmt.Sprintf("    Chosen path: %s", m.path.chosenPath)
 			pathChoices = append(pathChoices, statusStyle.Render(status))
 		}
 	}
