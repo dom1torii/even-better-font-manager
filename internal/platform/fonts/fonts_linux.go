@@ -31,22 +31,24 @@ func GetSystemFonts() []config.Font {
 			continue
 		}
 
-		parts := strings.SplitN(line, ":", 2)
+		parts := strings.SplitN(line, ":", 3)
+		if len(parts) < 3 {
+			continue
+		}
 		path := strings.TrimSpace(parts[0])
-		secondPart := strings.Split(parts[1], ":")
 
 		// one font (for some reason) can have multiple names separated my comma,
 		// so we use last one since it usually describes font the best
-		// EDIT: i need to do something else since sometimes it has the same name
-		// for multiple fonts of different weight, example Noto Sans
-		// EDIT2: maybe just append whatever is after style=?
-		fontNames := strings.TrimSpace(secondPart[0])
+		fontNames := strings.TrimSpace(parts[1])
 		nameList := strings.Split(fontNames, ",")
-
 		finalName := strings.TrimSpace(nameList[len(nameList)-1])
 
+		stylesPart := strings.TrimPrefix(strings.TrimSpace(parts[2]), "style=")
+		styleList := strings.Split(stylesPart, ",")
+		style := strings.TrimSpace(styleList[0])
+
 		fonts = append(fonts, config.Font{
-			Name: finalName,
+			Name: finalName + " " + style,
 			Path: path,
 		})
 	}
@@ -59,9 +61,9 @@ func GetSystemFonts() []config.Font {
 }
 
 func Preview(path string) {
-	cmd := exec.Command("fontforge", path)
+	cmd := exec.Command("gnome-font-viewer", path)
 	if err := cmd.Run(); err != nil {
-		log.Println("Failed to open fontforge", err)
+		log.Println("Failed to preview font", err)
 	}
 }
 
@@ -85,6 +87,12 @@ func GetName(path string) (string, error) {
 		return "", err
 	}
 
-	log.Println(name)
-	return name, nil
+	style, err := f.Name(nil, sfnt.NameIDSubfamily)
+	if err != nil {
+		// just return name if we cant find style
+		return name, nil
+	}
+
+	log.Println(name + " " + style)
+	return name + " " + style, nil
 }

@@ -54,9 +54,9 @@ func (m *model) getSystemFonts() tea.Cmd {
 	}
 }
 
-func (m *model) previewFont() tea.Cmd {
+func (m *model) previewFont(path string) tea.Cmd {
 	return func() tea.Msg {
-		fonts.Preview(m.systemFont.filteredFonts[m.systemFont.selection].Path)
+		fonts.Preview(path)
 		return fontPreviewMsg{}
 	}
 }
@@ -68,7 +68,7 @@ func (m *model) chooseCustomFontPath(title string) tea.Cmd {
 	}
 }
 
-func (m *model) getCustomFontName(path string) tea.Cmd {
+func (m *model) setCustomFont(path string) tea.Cmd {
 	return func() tea.Msg {
 		fontName, err := fonts.GetName(path)
 		if err != nil {

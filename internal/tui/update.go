@@ -11,7 +11,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.height = msg.Height
 
 	case customFontPathMsg:
-		return m, m.getCustomFontName(string(msg))
+		return m, m.setCustomFont(string(msg))
 
 	case customFontMsg:
 		m.customFont.chosenFont = font(msg)

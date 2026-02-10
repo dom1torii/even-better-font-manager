@@ -31,8 +31,7 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch msg.String() {
 			case "enter":
 				m.customFont.pathInput.Blur()
-				m.csPath = m.customFont.pathInput.Value()
-				return m, nil
+				return m, m.setCustomFont(m.customFont.pathInput.Value())
 			case "esc":
 				m.customFont.pathInput.Blur()
 				return m, nil
@@ -79,7 +78,7 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.chooseCustomFontPath("Choose custom font to add")
 			}
 			if m.customFont.selection == 2 {
-				return m, m.detectCsPath()
+				return m, m.previewFont(m.customFont.chosenFont.Path)
 			}
 			if m.customFont.selection == 3 {
 			  m.fonts.collection.Add(m.customFont.chosenFont.Font)

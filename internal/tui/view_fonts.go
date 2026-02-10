@@ -75,6 +75,10 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "d":
 			m.fonts.collection.Remove(m.fonts.leftSelection)
+			return m, nil
+
+		case "p":
+			return m, m.previewFont(m.fonts.collection.List()[m.fonts.leftSelection].Path)
 
 		case "q", "esc":
 			return m, tea.Quit
