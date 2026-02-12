@@ -5,6 +5,7 @@ import (
 )
 
 type csPathMsg string
+type getCsPathMsg string
 
 type pathConfirmedMsg struct{}
 type fontPreviewMsg struct{}

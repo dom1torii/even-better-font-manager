@@ -80,7 +80,7 @@ func (m *model) startView() string {
 		startChoices = append(startChoices, startItem(label, m.start.selection == i))
 		// add status lines
 		if i == 2 {
-			status := fmt.Sprintf("    Will apply: %s", m.chosenFont.Name)
+			status := fmt.Sprintf("    Will apply: %s", m.chosenFont.Name + " " + m.chosenFont.Style)
 			startChoices = append(startChoices, statusStyle.Render(status))
 		}
 	}

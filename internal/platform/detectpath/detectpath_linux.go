@@ -34,6 +34,7 @@ func DetectCS2Path() string {
 			if folder, ok := folderData.(map[string]any); ok {
 				if apps, ok := folder["apps"].(map[string]any); ok {
 					if _, found := apps[csAppId]; found {
+						log.Printf("CS2 Path: %s", filepath.Join(folder["path"].(string), "steamapps/common/Counter-Strike Global Offensive"))
 						return filepath.Join(folder["path"].(string), "steamapps/common/Counter-Strike Global Offensive")
 					}
 				}

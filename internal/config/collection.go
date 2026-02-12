@@ -15,6 +15,7 @@ type Collection struct {
 
 type Font struct {
 	Name string `json:"name"`
+	Style string `json:"style"`
 	Path string `json:"path"`
 }
 

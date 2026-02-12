@@ -48,7 +48,8 @@ func GetSystemFonts() []config.Font {
 		style := strings.TrimSpace(styleList[0])
 
 		fonts = append(fonts, config.Font{
-			Name: finalName + " " + style,
+			Name: finalName,
+			Style: style,
 			Path: path,
 		})
 	}
@@ -67,32 +68,32 @@ func Preview(path string) {
 	}
 }
 
-func GetName(path string) (string, error) {
+func GetName(path string) (string, string, error) {
 	if path == "" {
-		return "", fmt.Errorf("No path provided")
+		return "", "", fmt.Errorf("No path provided")
 	}
 
 	fontBytes, err := os.ReadFile(path)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	f, err := sfnt.Parse(fontBytes)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	name, err := f.Name(nil, sfnt.NameIDFull)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	style, err := f.Name(nil, sfnt.NameIDSubfamily)
 	if err != nil {
 		// just return name if we cant find style
-		return name, nil
+		return name, "", nil
 	}
 
 	log.Println(name + " " + style)
-	return name + " " + style, nil
+	return name, style, nil
 }

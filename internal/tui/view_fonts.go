@@ -110,7 +110,7 @@ func (m *model) fontsView() string {
 		end := min(start+maxViewHeight, len(m.fonts.collection.List()))
 		for i := start; i < end; i++ {
 			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name, isSelected, leftWidth-4))
+			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name + " " + m.fonts.collection.List()[i].Style, isSelected, leftWidth-4))
 		}
 	}
 

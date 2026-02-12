@@ -101,7 +101,7 @@ func (m *model) systemFontView() string {
 
 	for i := start; i < end; i++ {
 		isSelected := m.systemFont.selection == i
-		choices = append(choices, systemFontItem(m.systemFont.filteredFonts[i].Name, isSelected, fontsWidth-4))
+		choices = append(choices, systemFontItem(m.systemFont.filteredFonts[i].Name + " " + m.systemFont.filteredFonts[i].Style, isSelected, fontsWidth-4))
 	}
 
 	fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))

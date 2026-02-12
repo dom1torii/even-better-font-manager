@@ -109,7 +109,7 @@ func (m *model) customFontView() string {
 		customFontChoices = append(customFontChoices, row)
 
 		if i == 3 {
-			status := fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name)
+			status := fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name + " " + m.customFont.chosenFont.Style)
 			customFontChoices = append(customFontChoices, statusStyle.Render(status))
 		}
 

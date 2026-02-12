@@ -26,8 +26,11 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.fonts.collection = msg
 
 	case csPathMsg:
-		m.csPath = string(msg)
+		m.path.chosenPath = string(msg)
 		return m, nil
+
+	case getCsPathMsg:
+		m.csPath = string(msg)
 
 	case pathConfirmedMsg:
 		return m, nil
