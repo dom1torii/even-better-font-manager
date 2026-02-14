@@ -16,3 +16,5 @@ type systemFontsMsg []config.Font
 
 type customFontPathMsg string
 type customFontMsg font
+
+type fontConfigMsg struct{}

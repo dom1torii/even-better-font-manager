@@ -4,6 +4,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
+	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -95,5 +96,12 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 func (m *model) loadFontCollection() tea.Cmd {
 	return func() tea.Msg {
 		return fontCollectionMsg(config.LoadCollection())
+	}
+}
+
+func (m *model) writeFontConfig(fontName string, fontPath string) tea.Cmd {
+	return func() tea.Msg {
+		fontconfig.Apply(m.cfg, fontName, fontPath)
+		return fontConfigMsg{}
 	}
 }

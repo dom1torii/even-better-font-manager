@@ -59,7 +59,7 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 			if m.start.selection == 2 {
-				return m, nil
+				return m, m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path)
 			}
 			if m.start.selection == 3 {
 				m.state = statePath
