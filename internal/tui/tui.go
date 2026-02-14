@@ -3,6 +3,7 @@ package tui
 import (
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
+	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 )
@@ -82,4 +83,10 @@ func createInput(placeholder, prompt string, width int) textinput.Model {
 	ti.PlaceholderStyle = inputStyle
 
 	return ti
+}
+
+type menuItem struct {
+	render func(m *model) string
+	status func(m *model) string
+	action func(m *model) tea.Cmd
 }

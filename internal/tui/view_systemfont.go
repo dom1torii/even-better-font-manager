@@ -67,9 +67,6 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "p":
 			return m, m.previewFont(m.systemFont.filteredFonts[m.systemFont.selection].Path)
-		case "q", "esc":
-			m.state = stateFonts
-			return m, nil
 		case "f":
 			return m, m.systemFont.searchInput.Focus()
 		case "enter", " ":
@@ -78,6 +75,9 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			  m.fonts.collection.Add(selected)
 			  m.state = stateFonts
 			}
+			return m, nil
+		case "q", "esc":
+			m.state = stateFonts
 			return m, nil
 		}
 

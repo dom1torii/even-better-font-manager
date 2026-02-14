@@ -14,12 +14,67 @@ type customFontModel struct {
 	selection  int
 	pathInput  textinput.Model
 	chosenFont font
+	menuItems  []menuItem
 }
 
 func initialCustomFontModel() customFontModel {
 	return customFontModel{
 		selection: 0,
 		pathInput: createInput("/path/to/font", "Path: ", 20),
+		menuItems: []menuItem{
+			{
+				render: func(m *model) string {
+					return "(1) " + m.customFont.pathInput.View()
+				},
+				action: func(m *model) tea.Cmd {
+					return m.customFont.pathInput.Focus()
+				},
+			},
+	  	{
+				render: func(m *model) string {
+					return "(2) Open file chooser"
+				},
+				status: func(m *model) string {
+					if m.customFont.chosenFont.Error != nil {
+						return fmt.Sprintf("    Error: %s", m.customFont.chosenFont.Error)
+					}
+					return ""
+				},
+	      action: func(m *model) tea.Cmd {
+	        return m.chooseCustomFontPath("Choose custom font to add")
+	      },
+	    },
+	    {
+				render: func(m *model) string {
+					return "(3) Preview"
+				},
+	      action: func(m *model) tea.Cmd {
+	        return m.previewFont(m.customFont.chosenFont.Path)
+	      },
+	    },
+	    {
+				render: func(m *model) string {
+					return "(4) Confirm"
+				},
+		    status: func(m *model) string {
+		    	return fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name + " " + m.customFont.chosenFont.Style)
+		    },
+	      action: func(m *model) tea.Cmd {
+				  m.fonts.collection.Add(m.customFont.chosenFont.Font)
+				  m.state = stateFonts
+	        return nil
+	      },
+	    },
+	    {
+				render: func(m *model) string {
+					return "(q) Quit"
+				},
+	      action: func(m *model) tea.Cmd {
+	        m.Quitting = true
+	        return tea.Quit
+	      },
+	    },
+		},
 	}
 }
 
@@ -43,87 +98,48 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// normal keypresses
 		switch msg.String() {
-		case "1":
-			m.customFont.selection = 0
-			return m, nil
-		case "2":
-			m.customFont.selection = 1
-			return m, nil
-		case "3":
-			m.customFont.selection = 2
-			return m, nil
-		case "4":
-			m.customFont.selection = 3
-			return m, nil
-		case "q", "esc":
-			m.Quitting = true
-			return m, tea.Quit
+		case "1", "2", "3", "4":
+			idx := int(msg.String()[0] - '1')
+		  if idx < len(m.customFont.menuItems) {
+		    m.customFont.selection = idx
+		    return m, m.customFont.menuItems[idx].action(m)
+		  }
 		case "j", "down":
-			if m.customFont.selection < len(customFontItems)-1 {
-				m.customFont.selection++
-			} else {
-				m.customFont.selection = 0
-			}
+			if m.customFont.selection < len(m.customFont.menuItems)-1 {
+	     	m.customFont.selection++
+	    }
 		case "k", "up":
 			if m.customFont.selection > 0 {
-				m.customFont.selection--
-			} else {
-				m.customFont.selection = len(customFontItems) - 1
-			}
-		case "enter", " ":
-			if m.customFont.selection == 0 {
-				return m, m.customFont.pathInput.Focus()
-			}
-			if m.customFont.selection == 1 {
-				return m, m.chooseCustomFontPath("Choose custom font to add")
-			}
-			if m.customFont.selection == 2 {
-				return m, m.previewFont(m.customFont.chosenFont.Path)
-			}
-			if m.customFont.selection == 3 {
-			  m.fonts.collection.Add(m.customFont.chosenFont.Font)
-			  m.state = stateFonts
-			  return m, nil
-			}
+		    m.customFont.selection--
+		  }
 		case "i":
 			if m.customFont.selection == 0 {
 				return m, m.customFont.pathInput.Focus()
 			}
+		case "enter", " ":
+			return m, m.customFont.menuItems[m.customFont.selection].action(m)
+		case "q", "esc":
+			m.Quitting = true
+			return m, tea.Quit
 		}
 	}
 	return m, nil
 }
 
 func (m *model) customFontView() string {
-	var customFontChoices []string
-
-	for i, label := range customFontItems {
-		var row string
-		// add actual input instead of *input*
-		if i == 0 {
-			inputView := m.customFont.pathInput.View()
-			row = customFontItem("(1) "+inputView, m.customFont.selection == i)
-		} else {
-			row = customFontItem(label, m.customFont.selection == i)
-		}
-		customFontChoices = append(customFontChoices, row)
-
-		if i == 3 {
-			status := fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name + " " + m.customFont.chosenFont.Style)
-			customFontChoices = append(customFontChoices, statusStyle.Render(status))
-		}
-
-		if i == 1 && m.customFont.chosenFont.Error != nil {
-			status := fmt.Sprintf("    Error: %s", m.customFont.chosenFont.Error)
-			customFontChoices = append(customFontChoices, statusWarningStyle.Render(status))
+	var choices []string
+	for i, item := range m.customFont.menuItems {
+		choices = append(choices, customFontItemStyle(item.render(m), m.customFont.selection == i))
+		if item.status != nil && item.status(m) != "" {
+			choices = append(choices, statusStyle.Render(item.status(m)))
 		}
 	}
 
-	items := strings.Join(customFontChoices, "\n")
+	list := strings.Join(choices, "\n")
 	view := fmt.Sprintf(
 		"%s\n\n%s\n\n%s",
 		wordwrap.String(titleStyle.Render("Add custom font:"), m.width),
-		lipgloss.NewStyle().Width(35).Render(items),
+		lipgloss.NewStyle().Width(35).Render(list),
 		wordwrap.String(helpStyle.Render("(↓↑: move | space/enter: select | q/esc: quit)"), m.width),
 	)
 
@@ -136,14 +152,7 @@ func (m *model) customFontView() string {
 	)
 }
 
-var customFontItems = []string{
-	"(1) Path: *input*",
-	"(2) Open file chooser",
-	"(3) Preview",
-	"(4) Confirm",
-}
-
-func customFontItem(label string, isSelected bool) string {
+func customFontItemStyle(label string, isSelected bool) string {
 	if isSelected {
 		return selectionStyle.Render(label)
 	}
