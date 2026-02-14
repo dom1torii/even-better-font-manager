@@ -11,7 +11,7 @@ import (
 )
 
 // text template instead of xml encoding because we want it to be readable
-// if user decides to look inside the file.
+// and have comments if user decides to look inside the file.
 const configTmpl = `<?xml version='1.0'?>
 <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
 <fontconfig>
