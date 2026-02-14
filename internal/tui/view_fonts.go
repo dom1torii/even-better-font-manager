@@ -24,25 +24,25 @@ func initialFontsModel() fontsModel {
 		leftSelection:  0,
 		rightSelection: 0,
 		menuItems: []menuItem{
-	    {
-	      render: func(m *model) string {
+			{
+				render: func(m *model) string {
 					return "(1) Custom"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.state = stateCustomFont
-	        return nil
-	      },
-	    },
-	    {
-	      render: func(m *model) string {
+				action: func(m *model) tea.Cmd {
+					m.state = stateCustomFont
+					return nil
+				},
+			},
+			{
+				render: func(m *model) string {
 					return "(2) From system"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.state = stateSystemFont
-	        return nil
-	      },
-	    },
-  	},
+				action: func(m *model) tea.Cmd {
+					m.state = stateSystemFont
+					return nil
+				},
+			},
+		},
 	}
 }
 
@@ -54,10 +54,10 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "1", "2":
 			idx := int(msg.String()[0] - '1')
-		  if idx < len(m.fonts.menuItems) {
-		    m.fonts.rightSelection = idx
-		    return m, m.fonts.menuItems[idx].action(m)
-		  }
+			if idx < len(m.fonts.menuItems) {
+				m.fonts.rightSelection = idx
+				return m, m.fonts.menuItems[idx].action(m)
+			}
 		case "j", "down":
 			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(m.fonts.collection.List())-1 {
 				m.fonts.leftSelection++
@@ -80,18 +80,18 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "d":
 			if m.fonts.colActive == 0 {
-	      m.fonts.collection.Remove(m.fonts.leftSelection)
-	    }
+				m.fonts.collection.Remove(m.fonts.leftSelection)
+			}
 			return m, nil
 		case "p":
 			if m.fonts.colActive == 0 {
-	      return m, m.previewFont(m.fonts.collection.List()[m.fonts.leftSelection].Path)
-	    }
+				return m, m.previewFont(m.fonts.collection.List()[m.fonts.leftSelection].Path)
+			}
 		case "enter", " ":
 			if m.fonts.colActive == 0 {
 				selectedFont := m.fonts.collection.List()[m.fonts.leftSelection]
 				m.chosenFont = font{
-					Font: selectedFont,
+					Font:  selectedFont,
 					Error: nil,
 				}
 				m.state = stateStart
@@ -99,7 +99,7 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				return m, m.fonts.menuItems[m.fonts.rightSelection].action(m)
 			}
-    case "q", "esc":
+		case "q", "esc":
 			m.Quitting = true
 			return m, tea.Quit
 		}
@@ -130,15 +130,15 @@ func (m *model) fontsView() string {
 		end := min(start+maxViewHeight, len(m.fonts.collection.List()))
 		for i := start; i < end; i++ {
 			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name + " " + m.fonts.collection.List()[i].Style, isSelected, leftWidth-4))
+			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name+" "+m.fonts.collection.List()[i].Style, isSelected, leftWidth-4))
 		}
 	}
 
 	var rightChoices []string
-  for i, item := range m.fonts.menuItems {
-    isSelected := (m.fonts.colActive == 1 && m.fonts.rightSelection == i)
-    rightChoices = append(rightChoices, fontItem(item.render(m), isSelected, 0))
-  }
+	for i, item := range m.fonts.menuItems {
+		isSelected := (m.fonts.colActive == 1 && m.fonts.rightSelection == i)
+		rightChoices = append(rightChoices, fontItem(item.render(m), isSelected, 0))
+	}
 
 	rightTitle := lipgloss.NewStyle().PaddingTop(1).Render("Add font:")
 

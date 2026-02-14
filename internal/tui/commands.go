@@ -74,21 +74,21 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 		fontName, fontStyle, err := fonts.GetName(path)
 		if err != nil {
 			return customFontMsg{
-			  Font: config.Font{
-			    Name: fontName,
+				Font: config.Font{
+					Name:  fontName,
 					Style: fontStyle,
-			    Path: path,
-			  },
-			  Error: err,
+					Path:  path,
+				},
+				Error: err,
 			}
 		}
 		return customFontMsg{
-		  Font: config.Font{
-		    Name: fontName,
+			Font: config.Font{
+				Name:  fontName,
 				Style: fontStyle,
-		    Path: path,
-		  },
-		  Error: nil,
+				Path:  path,
+			},
+			Error: nil,
 		}
 	}
 }

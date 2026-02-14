@@ -14,8 +14,6 @@ import (
 	"golang.org/x/image/font/sfnt"
 )
 
-
-
 func GetSystemFonts() []config.Font {
 	cmd := exec.Command("fc-list")
 	output, err := cmd.Output()
@@ -48,9 +46,9 @@ func GetSystemFonts() []config.Font {
 		style := strings.TrimSpace(styleList[0])
 
 		fonts = append(fonts, config.Font{
-			Name: finalName,
+			Name:  finalName,
 			Style: style,
-			Path: path,
+			Path:  path,
 		})
 	}
 

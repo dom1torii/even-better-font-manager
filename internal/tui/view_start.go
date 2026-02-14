@@ -27,43 +27,43 @@ func initialStartModel() startModel {
 					return nil
 				},
 			},
-	  	{
+			{
 				render: func(m *model) string {
 					return "(2) Preview font"
 				},
-	      action: func(m *model) tea.Cmd {
-	        return m.previewFont(m.chosenFont.Path)
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					return m.previewFont(m.chosenFont.Path)
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(3) Apply"
 				},
-		    status: func(m *model) string {
-		    	return fmt.Sprintf("    Will apply: %s %s", m.chosenFont.Name, m.chosenFont.Style)
-		    },
-	      action: func(m *model) tea.Cmd {
-	        return m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path)
-	      },
-	    },
-	    {
+				status: func(m *model) string {
+					return fmt.Sprintf("    Will apply: %s %s", m.chosenFont.Name, m.chosenFont.Style)
+				},
+				action: func(m *model) tea.Cmd {
+					return m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path)
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(4) Change CS2 path"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.state = statePath
-	        return nil
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					m.state = statePath
+					return nil
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(q) Quit"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.Quitting = true
-	        return tea.Quit
-	      },
-	    },
+				action: func(m *model) tea.Cmd {
+					m.Quitting = true
+					return tea.Quit
+				},
+			},
 		},
 	}
 }
@@ -73,20 +73,20 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "1", "2", "3", "4":
-		  idx := int(msg.String()[0] - '1')
-		  if idx < len(m.start.menuItems) {
-		    m.path.selection = idx
-		    return m, m.start.menuItems[idx].action(m)
-		  }
+			idx := int(msg.String()[0] - '1')
+			if idx < len(m.start.menuItems) {
+				m.path.selection = idx
+				return m, m.start.menuItems[idx].action(m)
+			}
 		case "j", "down":
 			if m.path.selection < len(m.start.menuItems)-1 {
-      	m.path.selection++
-      }
+				m.path.selection++
+			}
 		case "k", "up":
 			m.start.selection--
-      if m.start.selection < 0 {
-        m.start.selection = len(m.start.menuItems) - 1
-      }
+			if m.start.selection < 0 {
+				m.start.selection = len(m.start.menuItems) - 1
+			}
 		case "enter", " ":
 			return m, m.start.menuItems[m.start.selection].action(m)
 		case "q", "esc":

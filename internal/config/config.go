@@ -127,6 +127,6 @@ func (cfg *Config) Save() {
 }
 
 func getConfigPath() string {
- 	homeDir := fs.GetHomeDir()
-  return filepath.Join(homeDir, ".config", "ebfm", "config.toml")
+	homeDir := fs.GetHomeDir()
+	return filepath.Join(homeDir, ".config", "ebfm", "config.toml")
 }

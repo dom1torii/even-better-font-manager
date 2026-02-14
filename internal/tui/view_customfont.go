@@ -30,7 +30,7 @@ func initialCustomFontModel() customFontModel {
 					return m.customFont.pathInput.Focus()
 				},
 			},
-	  	{
+			{
 				render: func(m *model) string {
 					return "(2) Open file chooser"
 				},
@@ -40,40 +40,40 @@ func initialCustomFontModel() customFontModel {
 					}
 					return ""
 				},
-	      action: func(m *model) tea.Cmd {
-	        return m.chooseCustomFontPath("Choose custom font to add")
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					return m.chooseCustomFontPath("Choose custom font to add")
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(3) Preview"
 				},
-	      action: func(m *model) tea.Cmd {
-	        return m.previewFont(m.customFont.chosenFont.Path)
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					return m.previewFont(m.customFont.chosenFont.Path)
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(4) Confirm"
 				},
-		    status: func(m *model) string {
-		    	return fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name + " " + m.customFont.chosenFont.Style)
-		    },
-	      action: func(m *model) tea.Cmd {
-				  m.fonts.collection.Add(m.customFont.chosenFont.Font)
-				  m.state = stateFonts
-	        return nil
-	      },
-	    },
-	    {
+				status: func(m *model) string {
+					return fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name+" "+m.customFont.chosenFont.Style)
+				},
+				action: func(m *model) tea.Cmd {
+					m.fonts.collection.Add(m.customFont.chosenFont.Font)
+					m.state = stateFonts
+					return nil
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(q) Quit"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.Quitting = true
-	        return tea.Quit
-	      },
-	    },
+				action: func(m *model) tea.Cmd {
+					m.Quitting = true
+					return tea.Quit
+				},
+			},
 		},
 	}
 }
@@ -100,18 +100,18 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "1", "2", "3", "4":
 			idx := int(msg.String()[0] - '1')
-		  if idx < len(m.customFont.menuItems) {
-		    m.customFont.selection = idx
-		    return m, m.customFont.menuItems[idx].action(m)
-		  }
+			if idx < len(m.customFont.menuItems) {
+				m.customFont.selection = idx
+				return m, m.customFont.menuItems[idx].action(m)
+			}
 		case "j", "down":
 			if m.customFont.selection < len(m.customFont.menuItems)-1 {
-	     	m.customFont.selection++
-	    }
+				m.customFont.selection++
+			}
 		case "k", "up":
 			if m.customFont.selection > 0 {
-		    m.customFont.selection--
-		  }
+				m.customFont.selection--
+			}
 		case "i":
 			if m.customFont.selection == 0 {
 				return m, m.customFont.pathInput.Focus()

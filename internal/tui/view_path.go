@@ -11,9 +11,9 @@ import (
 )
 
 type pathModel struct {
-	selection int
-	pathInput textinput.Model
-	menuItems []menuItem
+	selection  int
+	pathInput  textinput.Model
+	menuItems  []menuItem
 	chosenPath string
 }
 
@@ -30,44 +30,44 @@ func initialPathModel() pathModel {
 					return m.path.pathInput.Focus()
 				},
 			},
-	  	{
+			{
 				render: func(m *model) string {
 					return "(2) Open file chooser"
 				},
-	      action: func(m *model) tea.Cmd {
-	        return m.chooseCsPath("Choose your Counter-Strike Global Offensive/ folder")
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					return m.chooseCsPath("Choose your Counter-Strike Global Offensive/ folder")
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(3) Try to detect"
 				},
-	      action: func(m *model) tea.Cmd {
-	        return m.detectCsPath()
-	      },
-	    },
-	    {
+				action: func(m *model) tea.Cmd {
+					return m.detectCsPath()
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(4) Confirm"
 				},
-		    status: func(m *model) string {
-		    	return fmt.Sprintf("    Chosen path: %s", m.path.chosenPath)
-		    },
-	      action: func(m *model) tea.Cmd {
+				status: func(m *model) string {
+					return fmt.Sprintf("    Chosen path: %s", m.path.chosenPath)
+				},
+				action: func(m *model) tea.Cmd {
 					m.csPath = m.path.chosenPath
 					m.state = stateStart
-	        return m.confirmCsPath()
-	      },
-	    },
-	    {
+					return m.confirmCsPath()
+				},
+			},
+			{
 				render: func(m *model) string {
 					return "(q) Quit"
 				},
-	      action: func(m *model) tea.Cmd {
-	        m.Quitting = true
-	        return tea.Quit
-	      },
-	    },
+				action: func(m *model) tea.Cmd {
+					m.Quitting = true
+					return tea.Quit
+				},
+			},
 		},
 	}
 }
@@ -94,20 +94,20 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// normal keypresses
 		switch msg.String() {
 		case "1", "2", "3", "4":
-		  idx := int(msg.String()[0] - '1')
-		  if idx < len(m.path.menuItems) {
-		    m.path.selection = idx
-		    return m, m.path.menuItems[idx].action(m)
-		  }
+			idx := int(msg.String()[0] - '1')
+			if idx < len(m.path.menuItems) {
+				m.path.selection = idx
+				return m, m.path.menuItems[idx].action(m)
+			}
 		case "j", "down":
 			if m.path.selection < len(m.path.menuItems)-1 {
-      	m.path.selection++
-      }
+				m.path.selection++
+			}
 		case "k", "up":
 			if m.path.selection > 0 {
-        m.path.selection--
-      }
-    case "i":
+				m.path.selection--
+			}
+		case "i":
 			if m.path.selection == 0 {
 				return m, m.path.pathInput.Focus()
 			}

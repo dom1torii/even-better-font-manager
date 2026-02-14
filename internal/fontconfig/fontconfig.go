@@ -53,57 +53,57 @@ func Apply(cfg *config.Config, fontName string, fontPath string) {
 
 	fontFile := filepath.Base(fontPath)
 	data := struct {
-    FontFile string
-    FontName string
-    Size     float64
-  }{
-    FontFile: fontFile,
-    FontName: fontName,
-    Size:     0.8,
-  }
+		FontFile string
+		FontName string
+		Size     float64
+	}{
+		FontFile: fontFile,
+		FontName: fontName,
+		Size:     0.8,
+	}
 
-  confDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/conf.d")
-  confPath := filepath.Join(confDir, "42-repl-global.conf")
+	confDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/conf.d")
+	confPath := filepath.Join(confDir, "42-repl-global.conf")
 
-  f, err := os.Create(confPath)
-  if err != nil {
-    log.Println("Failed to create config file: ", err)
-    return
-  }
-  defer f.Close()
+	f, err := os.Create(confPath)
+	if err != nil {
+		log.Println("Failed to create config file: ", err)
+		return
+	}
+	defer f.Close()
 
-  tmpl, err := template.New("fontconfig").Parse(configTmpl)
-  if err != nil {
-    log.Println("Failed to parse template: ", err)
-    return
-  }
+	tmpl, err := template.New("fontconfig").Parse(configTmpl)
+	if err != nil {
+		log.Println("Failed to parse template: ", err)
+		return
+	}
 
-  err = tmpl.Execute(f, data)
-  if err != nil {
-    log.Println("Failed to write template to file: ", err)
-  }
+	err = tmpl.Execute(f, data)
+	if err != nil {
+		log.Println("Failed to write template to file: ", err)
+	}
 }
 
 func copyFont(cfg *config.Config, fontPath string) {
 	fontsDir := filepath.Join(cfg.General.CS2Path, "game/csgo/panorama/fonts")
 	log.Println(fontPath)
 	f, err := os.Open(fontPath)
-  if err != nil {
-    log.Fatalln("Failed to open font: ", err)
-  }
-  defer f.Close()
+	if err != nil {
+		log.Fatalln("Failed to open font: ", err)
+	}
+	defer f.Close()
 
-  fileName := filepath.Base(fontPath)
-  destPath := filepath.Join(fontsDir, fileName)
+	fileName := filepath.Base(fontPath)
+	destPath := filepath.Join(fontsDir, fileName)
 
-  dest, err := os.Create(destPath)
-  if err != nil {
-  	log.Fatalln("Failed to create destination file: ", err)
-  }
-  defer dest.Close()
+	dest, err := os.Create(destPath)
+	if err != nil {
+		log.Fatalln("Failed to create destination file: ", err)
+	}
+	defer dest.Close()
 
-  _, err = io.Copy(dest, f)
-  if err != nil {
-  	log.Fatalln("Failed to copy font into game directory: ", err)
-  }
+	_, err = io.Copy(dest, f)
+	if err != nil {
+		log.Fatalln("Failed to copy font into game directory: ", err)
+	}
 }
