@@ -6,7 +6,7 @@ import (
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
-	"github.com/dom1torii/even-better-font-manager/internal/platform/filechooser"
+	"github.com/dom1torii/even-better-font-manager/internal/zenity"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
@@ -28,7 +28,7 @@ func (m *model) detectCsPath() tea.Cmd {
 
 func (m *model) chooseCsPath(title string) tea.Cmd {
 	return func() tea.Msg {
-		path := filechooser.Open("directory", title)
+		path := zenity.Open("directory", title)
 		return csPathMsg(path)
 	}
 }
@@ -64,7 +64,7 @@ func (m *model) previewFont(path string) tea.Cmd {
 
 func (m *model) chooseCustomFontPath(title string) tea.Cmd {
 	return func() tea.Msg {
-		path := filechooser.Open("", title)
+		path := zenity.Open("", title)
 		return customFontPathMsg(path)
 	}
 }
