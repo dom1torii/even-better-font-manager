@@ -62,7 +62,7 @@ func GetSystemFonts() []config.Font {
 func Preview(path string) {
 	cmd := exec.Command("gnome-font-viewer", path)
 	if err := cmd.Run(); err != nil {
-		log.Println("Failed to preview font", err)
+		log.Println("Failed to preview font: ", err)
 	}
 }
 
