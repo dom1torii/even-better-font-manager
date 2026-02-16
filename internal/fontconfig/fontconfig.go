@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
+	"github.com/dom1torii/even-better-font-manager/internal/fs"
 )
 
 // text template instead of xml encoding because we want it to be readable
@@ -19,7 +20,7 @@ const configTmpl = `<?xml version='1.0'?>
 	<!-- Choose reset in the tool to stop using custom font. -->
 
 	<!-- Both file name and font name work, but devs recommend file name. -->
-	<!-- Font file should be located in /game/csgo/panorama/fonts/ -->
+	<!-- Font file should be located in /game/core/panorama/fonts/ -->
 	<fontpattern>{{.FontFile}}</fontpattern>
 
 	<!--
@@ -85,7 +86,8 @@ func Apply(cfg *config.Config, fontName string, fontPath string) {
 }
 
 func copyFont(cfg *config.Config, fontPath string) {
-	fontsDir := filepath.Join(cfg.General.CS2Path, "game/csgo/panorama/fonts")
+	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/custom")
+	fs.EnsureDirectory(fontsDir)
 	log.Println(fontPath)
 	f, err := os.Open(fontPath)
 	if err != nil {

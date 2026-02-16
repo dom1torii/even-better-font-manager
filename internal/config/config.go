@@ -39,8 +39,8 @@ func Init() *Config {
 
 	defaultLogPath := filepath.Join(homeDir, "ebfm.log")
 
-	fs.EnsureDirectory(configPath)
-	fs.EnsureDirectory(collectionPath)
+	fs.EnsureFile(configPath)
+	fs.EnsureFile(collectionPath)
 
 	info, err := os.Stat(configPath)
 	if err == nil && info.Size() == 0 {
@@ -71,7 +71,7 @@ func Init() *Config {
 	}
 
 	if cfg.Log.Enabled {
-		fs.EnsureDirectory(cfg.Log.Path)
+		fs.EnsureFile(cfg.Log.Path)
 		initLogger(cfg.Log.Path)
 		log.Println("Started logging at: ", cfg.Log.Path)
 	} else {

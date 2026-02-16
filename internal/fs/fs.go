@@ -28,7 +28,7 @@ func GetHomeDir() string {
 	return usr.HomeDir
 }
 
-func EnsureDirectory(path string) {
+func EnsureFile(path string) {
 	dir := filepath.Dir(path)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		log.Fatalln("Failed to create directory: ", err)
@@ -48,4 +48,11 @@ func EnsureDirectory(path string) {
 	// so we need to change ownership of the files
 	perms.FixPermissions(dir)
 	perms.FixPermissions(path)
+}
+
+func EnsureDirectory(dirPath string) {
+	if err := os.MkdirAll(dirPath, 0755); err != nil {
+		log.Fatalln("Failed to create directory: ", err)
+	}
+	perms.FixPermissions(dirPath)
 }
