@@ -1,0 +1,49 @@
+version: '3'
+
+vars:
+  BINARY_NAME: ebfm
+  BINARY_PATH: "/usr/bin"
+  DESKTOP_PATH: "/usr/share/applications"
+  ICON_PATH: "/usr/share/icons/hicolor/256x256/apps"
+
+tasks:
+  build:
+    desc: Build EBFM
+    cmds:
+      - go build -v -o ./build/ ./cmd/ebfm/
+
+  install:
+    desc: Build and install EBFM
+    cmds:
+      - task: build
+
+      - mkdir -p {{.BINARY_PATH}}
+      - mkdir -p {{.DESKTOP_PATH}}
+
+      - cp ./assets/icon-256.png {{.ICON_PATH}}/{{.BINARY_NAME}}.png
+
+      - cp ./build/{{.BINARY_NAME}} {{.BINARY_PATH}}/{{.BINARY_NAME}}
+      - chmod +x {{.BINARY_PATH}}/{{.BINARY_NAME}}
+      - |
+        cat <<EOF > {{.DESKTOP_PATH}}/{{.BINARY_NAME}}.desktop
+        [Desktop Entry]
+        Version=1.0
+        Type=Application
+        Name={{.BINARY_NAME}}
+        GenericName=TUI font manager for CS2
+        Comment=TUI font manager for CS2
+        Exec={{.BINARY_PATH}}/{{.BINARY_NAME}}
+        Icon={{.BINARY_NAME}}
+        Terminal=true
+        Categories=Utility;
+        EOF
+
+  uninstall:
+    desc: Uninstall EBFM
+    cmds:
+      - rm -rf ./build
+
+      - rm {{.ICON_PATH}}/{{.BINARY_NAME}}.png
+
+      - rm {{.BINARY_PATH}}/{{.BINARY_NAME}}
+      - rm {{.DESKTOP_PATH}}/{{.BINARY_NAME}}.desktop
