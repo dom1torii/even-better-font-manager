@@ -3,15 +3,12 @@
 package fonts
 
 import (
-	"fmt"
 	"log"
-	"os"
 	"os/exec"
 	"sort"
 	"strings"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
-	"golang.org/x/image/font/sfnt"
 )
 
 func GetSystemFonts() []config.Font {
@@ -64,34 +61,4 @@ func Preview(path string) {
 	if err := cmd.Run(); err != nil {
 		log.Println("Failed to preview font: ", err)
 	}
-}
-
-func GetName(path string) (string, string, error) {
-	if path == "" {
-		return "", "", fmt.Errorf("No path provided")
-	}
-
-	fontBytes, err := os.ReadFile(path)
-	if err != nil {
-		return "", "", err
-	}
-
-	f, err := sfnt.Parse(fontBytes)
-	if err != nil {
-		return "", "", err
-	}
-
-	name, err := f.Name(nil, sfnt.NameIDFull)
-	if err != nil {
-		return "", "", err
-	}
-
-	style, err := f.Name(nil, sfnt.NameIDSubfamily)
-	if err != nil {
-		// just return name if we cant find style
-		return name, "", nil
-	}
-
-	log.Println(name + " " + style)
-	return name, style, nil
 }
