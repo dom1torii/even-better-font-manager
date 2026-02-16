@@ -3,16 +3,16 @@
 package fonts
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
-	"fmt"
-	"os/exec"
 
-	"golang.org/x/sys/windows/registry"
 	"golang.org/x/image/font/sfnt"
+	"golang.org/x/sys/windows/registry"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 )
@@ -37,40 +37,40 @@ func GetSystemFonts() []config.Font {
 	fontsDir := filepath.Join(os.Getenv("WINDIR"), "Fonts")
 
 	for _, name := range names {
-    filename, _, err := k.GetStringValue(name)
-    if err != nil {
-      continue
-    }
+		filename, _, err := k.GetStringValue(name)
+		if err != nil {
+			continue
+		}
 
-    path := filename
-    if !filepath.IsAbs(filename) {
-        path = filepath.Join(fontsDir, filename)
-    }
+		path := filename
+		if !filepath.IsAbs(filename) {
+			path = filepath.Join(fontsDir, filename)
+		}
 
-    fontName, style, err := GetName(path)
-    if err != nil {
-      continue
-    }
+		fontName, style, err := GetName(path)
+		if err != nil {
+			continue
+		}
 
-    fonts = append(fonts, config.Font{
-      Name:  fontName,
-      Style: style,
-      Path:  path,
-    })
-  }
+		fonts = append(fonts, config.Font{
+			Name:  fontName,
+			Style: style,
+			Path:  path,
+		})
+	}
 
-  sort.SliceStable(fonts, func(i, j int) bool {
-    return strings.ToLower(fonts[i].Name) < strings.ToLower(fonts[j].Name)
-  })
+	sort.SliceStable(fonts, func(i, j int) bool {
+		return strings.ToLower(fonts[i].Name) < strings.ToLower(fonts[j].Name)
+	})
 
 	return fonts
 }
 
 func Preview(path string) {
-  cmd := exec.Command("cmd", "/c", "start", "", path)
-  if err := cmd.Run(); err != nil {
-    log.Println("Failed to preview font: ", err)
-  }
+	cmd := exec.Command("cmd", "/c", "start", "", path)
+	if err := cmd.Run(); err != nil {
+		log.Println("Failed to preview font: ", err)
+	}
 }
 
 func GetName(path string) (string, string, error) {

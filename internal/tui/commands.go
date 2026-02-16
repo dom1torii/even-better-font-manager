@@ -6,8 +6,8 @@ import (
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
-	"github.com/dom1torii/even-better-font-manager/internal/zenity"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
+	"github.com/dom1torii/even-better-font-manager/internal/zenity"
 )
 
 func (m *model) Init() tea.Cmd {
