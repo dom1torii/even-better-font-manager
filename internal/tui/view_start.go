@@ -75,17 +75,16 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "1", "2", "3", "4":
 			idx := int(msg.String()[0] - '1')
 			if idx < len(m.start.menuItems) {
-				m.path.selection = idx
+				m.start.selection = idx
 				return m, m.start.menuItems[idx].action(m)
 			}
 		case "j", "down":
-			if m.path.selection < len(m.start.menuItems)-1 {
-				m.path.selection++
+			if m.start.selection < len(m.start.menuItems)-1 {
+				m.start.selection++
 			}
 		case "k", "up":
-			m.start.selection--
-			if m.start.selection < 0 {
-				m.start.selection = len(m.start.menuItems) - 1
+			if m.start.selection > 0 {
+				m.start.selection--
 			}
 		case "enter", " ":
 			return m, m.start.menuItems[m.start.selection].action(m)
