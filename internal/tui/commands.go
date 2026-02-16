@@ -41,6 +41,12 @@ func (m *model) confirmCsPath() tea.Cmd {
 	}
 }
 
+func (m *model) verifyCsPath(path string) tea.Cmd {
+	return func() tea.Msg {
+		return verifyCsPathMsg(cs2path.Verify(path))
+	}
+}
+
 func (m *model) getCsPath() tea.Cmd {
 	return func() tea.Msg {
 		path := m.cfg.General.CS2Path

@@ -32,6 +32,9 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case getCsPathMsg:
 		m.csPath = string(msg)
 
+	case verifyCsPathMsg:
+		m.path.pathError = msg
+
 	case pathConfirmedMsg:
 		return m, nil
 
