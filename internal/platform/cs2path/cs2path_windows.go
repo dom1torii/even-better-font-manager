@@ -1,6 +1,6 @@
 //go:build windows
 
-package detectpath
+package cs2path
 
 import (
 	"log"
@@ -9,7 +9,7 @@ import (
 )
 
 // not tested yet, too lazy to open windows vm, surely it works
-func DetectCS2Path() string {
+func Detect() string {
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\WOW6432Node\Valve\cs2`, registry.QUERY_VALUE)
 	if err != nil {
 		log.Println("No CS2 path detected")

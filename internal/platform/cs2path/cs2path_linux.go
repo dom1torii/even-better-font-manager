@@ -1,6 +1,6 @@
 //go:build linux
 
-package detectpath
+package cs2path
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 	"github.com/andygrunwald/vdf"
 )
 
-func DetectCS2Path() string {
+func Detect() string {
 	// on linux, steam always (probably) adds a file to your home directory
 	// that is called .steam that has folders that symlink to your actual
 	// steam installation, so we use it to get libraryfolders.vdf and

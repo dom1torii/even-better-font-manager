@@ -5,7 +5,7 @@ import (
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
-	"github.com/dom1torii/even-better-font-manager/internal/platform/detectpath"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 	"github.com/dom1torii/even-better-font-manager/internal/zenity"
 )
@@ -21,7 +21,7 @@ func (m *model) Init() tea.Cmd {
 
 func (m *model) detectCsPath() tea.Cmd {
 	return func() tea.Msg {
-		path := detectpath.DetectCS2Path()
+		path := cs2path.Detect()
 		return csPathMsg(path)
 	}
 }
