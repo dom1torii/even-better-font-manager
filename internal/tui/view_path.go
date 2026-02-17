@@ -8,14 +8,15 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wordwrap"
+
+	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 )
 
 type pathModel struct {
 	selection  int
 	pathInput  textinput.Model
 	menuItems  []menuItem
-	chosenPath string
-	pathError  error
+	chosenPath cs2path.CS2Path
 }
 
 func initialPathModel() pathModel {
@@ -36,8 +37,8 @@ func initialPathModel() pathModel {
 					return "(2) Open file chooser"
 				},
 				status: func(m *model) string {
-					if m.path.pathError != nil {
-						return fmt.Sprintf("    Error: %s", m.path.pathError)
+					if m.path.chosenPath.Error != nil {
+						return fmt.Sprintf("    Error: %s", m.path.chosenPath.Error)
 					}
 					return ""
 				},
@@ -58,10 +59,10 @@ func initialPathModel() pathModel {
 					return "(4) Confirm"
 				},
 				status: func(m *model) string {
-					return fmt.Sprintf("    Chosen path: %s", m.path.chosenPath)
+					return fmt.Sprintf("    Chosen path: %s", m.path.chosenPath.Path)
 				},
 				action: func(m *model) tea.Cmd {
-					m.csPath = m.path.chosenPath
+					m.csPath = m.path.chosenPath.Path
 					m.state = stateStart
 					return m.confirmCsPath()
 				},
@@ -86,11 +87,7 @@ func (m *model) updatePathSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.path.pathInput.Focused() {
 			switch msg.String() {
 			case "enter":
-				// need to figure something out so its not only errors but also doesn't set chosenPath if verification failed
-				// also add error to the file chooser
-				// probably need to return path in one thing as a struct with an error, idk yet
 				m.path.pathInput.Blur()
-				m.path.chosenPath = m.path.pathInput.Value()
 				return m, m.verifyCsPath(m.path.pathInput.Value())
 			case "esc":
 				m.path.pathInput.Blur()

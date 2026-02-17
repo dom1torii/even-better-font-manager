@@ -2,6 +2,7 @@ package tui
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 )
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -26,14 +27,11 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.fonts.collection = msg
 
 	case csPathMsg:
-		m.path.chosenPath = string(msg)
+		m.path.chosenPath = cs2path.CS2Path(msg)
 		return m, nil
 
 	case getCsPathMsg:
 		m.csPath = string(msg)
-
-	case verifyCsPathMsg:
-		m.path.pathError = msg
 
 	case pathConfirmedMsg:
 		return m, nil

@@ -2,11 +2,11 @@ package tui
 
 import (
 	"github.com/dom1torii/even-better-font-manager/internal/config"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 )
 
-type csPathMsg string
+type csPathMsg cs2path.CS2Path
 type getCsPathMsg string
-type verifyCsPathMsg error
 
 type pathConfirmedMsg struct{}
 type fontPreviewMsg struct{}
