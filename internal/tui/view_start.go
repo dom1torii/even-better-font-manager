@@ -48,7 +48,15 @@ func initialStartModel() startModel {
 			},
 			{
 				render: func(m *model) string {
-					return "(4) Change CS2 path"
+					return "(4) Reset"
+				},
+				action: func(m *model) tea.Cmd {
+					return m.resetFontConfig()
+				},
+			},
+			{
+				render: func(m *model) string {
+					return "(5) Change CS2 path"
 				},
 				action: func(m *model) tea.Cmd {
 					m.state = statePath
@@ -72,7 +80,7 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "1", "2", "3", "4":
+		case "1", "2", "3", "4", "5":
 			idx := int(msg.String()[0] - '1')
 			if idx < len(m.start.menuItems) {
 				m.start.selection = idx

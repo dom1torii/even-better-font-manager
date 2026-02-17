@@ -109,3 +109,17 @@ func copyFont(cfg *config.Config, fontPath string) {
 		log.Fatalln("Failed to copy font into game directory: ", err)
 	}
 }
+
+func Reset(cfg *config.Config) {
+	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/custom")
+	confDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/conf.d")
+	confPath := filepath.Join(confDir, "42-repl-global.conf")
+
+	if err := os.RemoveAll(fontsDir); err != nil {
+    log.Println("Failed to delete custom fonts directory: ", err)
+	}
+
+	if err := os.RemoveAll(confPath); err != nil {
+		log.Println("Failed to delete fonts config: ", err)
+	}
+}

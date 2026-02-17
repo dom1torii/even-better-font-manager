@@ -113,3 +113,10 @@ func (m *model) writeFontConfig(fontName string, fontPath string) tea.Cmd {
 		return fontConfigMsg{}
 	}
 }
+
+func (m *model) resetFontConfig() tea.Cmd {
+	return func() tea.Msg {
+		fontconfig.Reset(m.cfg)
+		return fontConfigMsg{}
+	}
+}
