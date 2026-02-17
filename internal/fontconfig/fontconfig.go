@@ -17,10 +17,10 @@ const configTmpl = `<?xml version='1.0'?>
 <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
 <fontconfig>
 	<!-- MANAGED BY EVEN BETTER FONT MANAGER -->
-	<!-- Choose reset in the tool to stop using custom font. -->
+	<!-- Choose reset in the tool or delete this file to stop using custom font. -->
 
 	<!-- Both file name and font name work, but devs recommend file name. -->
-	<!-- Font file should be located in /game/core/panorama/fonts/ -->
+	<!-- Font file should be located in /game/core/panorama/fonts/custom/ -->
 	<fontpattern>{{.FontFile}}</fontpattern>
 
 	<!--
