@@ -19,6 +19,8 @@ func (m *model) Init() tea.Cmd {
 	)
 }
 
+// 3 functions below probably work perfectly, but maybe i need to simplify it all into 1 function?
+// or 2 functions at least? verifyCsPath function doesn't really seem necessary idk
 func (m *model) detectCsPath() tea.Cmd {
 	return func() tea.Msg {
 		path := cs2path.Detect()
@@ -26,11 +28,15 @@ func (m *model) detectCsPath() tea.Cmd {
 	}
 }
 
-// 3 functions below probably work perfectly, but maybe i need to simplify it all into 1 function?
-// or 2 functions at least? verifyCsPath function doesn't really seem necessary idk
 func (m *model) chooseCsPath(title string) tea.Cmd {
 	return func() tea.Msg {
 		path := zenity.Open("directory", title)
+		return csPathMsg(cs2path.Verify(path))
+	}
+}
+
+func (m *model) verifyCsPath(path string) tea.Cmd {
+	return func() tea.Msg {
 		return csPathMsg(cs2path.Verify(path))
 	}
 }
@@ -40,12 +46,6 @@ func (m *model) confirmCsPath() tea.Cmd {
 		m.cfg.General.CS2Path = m.csPath
 		m.cfg.Save()
 		return pathConfirmedMsg{}
-	}
-}
-
-func (m *model) verifyCsPath(path string) tea.Cmd {
-	return func() tea.Msg {
-		return csPathMsg(cs2path.Verify(path))
 	}
 }
 
