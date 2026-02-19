@@ -20,7 +20,7 @@ const configTmpl = `<?xml version='1.0'?>
 	<!-- Choose reset in the tool or delete this file to stop using custom font. -->
 
 	<!-- Both file name and font name work, but devs recommend file name. -->
-	<!-- Font file should be located in /game/core/panorama/fonts/custom/ -->
+	<!-- Font file should be located in /game/core/panorama/fonts/ebfm-custom/ -->
 	<fontpattern>{{.FontFile}}</fontpattern>
 
 	<!--
@@ -86,7 +86,7 @@ func Apply(cfg *config.Config, fontName string, fontPath string, fontSize float6
 }
 
 func copyFont(cfg *config.Config, fontPath string) {
-	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/custom")
+	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/ebfm-custom")
 	fs.EnsureDirectory(fontsDir)
 	log.Println(fontPath)
 	f, err := os.Open(fontPath)
@@ -111,7 +111,7 @@ func copyFont(cfg *config.Config, fontPath string) {
 }
 
 func Reset(cfg *config.Config) {
-	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/custom")
+	fontsDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/ebfm-custom")
 	confDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/conf.d")
 	confPath := filepath.Join(confDir, "42-repl-global.conf")
 
