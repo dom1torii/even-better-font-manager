@@ -78,12 +78,12 @@ func (m *model) chooseCustomFontPath(title string) tea.Cmd {
 
 func (m *model) setCustomFont(path string) tea.Cmd {
 	return func() tea.Msg {
-		fontName, fontStyle, err := fonts.GetName(path)
+		f, err := fonts.ParseFont(path)
 		if err != nil {
 			return customFontMsg{
 				Font: fonts.Font{
-					Name:  fontName,
-					Style: fontStyle,
+					Name:  f.Name,
+					Style: f.Style,
 					Path:  path,
 				},
 				Error: err,
@@ -91,8 +91,8 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 		}
 		return customFontMsg{
 			Font: fonts.Font{
-				Name:  fontName,
-				Style: fontStyle,
+				Name:  f.Name,
+				Style: f.Style,
 				Path:  path,
 			},
 			Error: nil,

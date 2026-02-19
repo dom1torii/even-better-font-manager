@@ -43,14 +43,14 @@ func GetSystemFonts() []Font {
 			path = filepath.Join(fontsDir, filename)
 		}
 
-		fontName, style, err := GetName(path)
+		f, err := ParseFont(path)
 		if err != nil {
 			continue
 		}
 
 		fonts = append(fonts, Font{
-			Name:  fontName,
-			Style: style,
+			Name:  f.Name,
+			Style: f.Style,
 			Path:  path,
 		})
 	}

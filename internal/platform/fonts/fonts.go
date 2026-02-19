@@ -1,7 +1,6 @@
 package fonts
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -17,36 +16,6 @@ type Font struct {
 	Name  string
 	Style string
 	Path  string
-}
-
-func GetName(path string) (string, string, error) {
-	if path == "" {
-		return "", "", fmt.Errorf("No path provided")
-	}
-
-	fontBytes, err := os.ReadFile(path)
-	if err != nil {
-		return "", "", err
-	}
-
-	f, err := sfnt.Parse(fontBytes)
-	if err != nil {
-		return "", "", err
-	}
-
-	name, err := f.Name(nil, sfnt.NameIDFull)
-	if err != nil {
-		return "", "", err
-	}
-
-	style, err := f.Name(nil, sfnt.NameIDSubfamily)
-	if err != nil {
-		// just return name if we cant find style
-		return name, "", nil
-	}
-
-	log.Println(name + " " + style)
-	return name, style, nil
 }
 
 func GetCollection(cfg *config.Config) []Font {
@@ -68,7 +37,12 @@ func GetCollection(cfg *config.Config) []Font {
 		extension := strings.ToLower(filepath.Ext(fontFile.Name()))
 		if extension == ".ttf" || extension == ".otf" {
 			path := filepath.Join(fontsDir, fontFile.Name())
-			fonts = append(fonts, ParseFont(path))
+			f, err := ParseFont(path)
+			if err != nil {
+				log.Println("Something happened when parsing font: ", err)
+				continue
+			}
+			fonts = append(fonts, f)
 		}
 	}
 
@@ -120,20 +94,20 @@ func RemoveFromCollection(path string) {
   }
 }
 
-func ParseFont(path string) Font {
+func ParseFont(path string) (Font, error) {
 	fontBytes, err := os.ReadFile(path)
   if err != nil {
-    return Font{}
+    return Font{}, err
   }
 
   f, err := sfnt.Parse(fontBytes)
   if err != nil {
-  	return Font{}
+  	return Font{}, err
   }
 
  	name, err := f.Name(nil, sfnt.NameIDFull)
 	if err != nil {
-		return Font{}
+		return Font{}, err
 	}
 
 	style, err := f.Name(nil, sfnt.NameIDSubfamily)
@@ -141,12 +115,12 @@ func ParseFont(path string) Font {
 		return Font{
 			Name: name,
 			Path: path,
-		}
+		}, nil
 	}
 
 	return Font{
 		Name: name,
 		Style: style,
 		Path: path,
-	}
+	}, nil
 }
