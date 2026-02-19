@@ -21,3 +21,6 @@ Other installation methods will be added after first release is out.
 2. Clone the repository: `git clone https://github.com/dom1torii/even-better-font-manager.git`
 4. `cd` into the folder
 5. Build the binary: `go build ./cmd/ebfm/`
+
+### Planned features/improvements
+- Rework how font collection is stored
