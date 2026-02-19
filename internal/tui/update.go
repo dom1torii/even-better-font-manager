@@ -23,8 +23,12 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.systemFont.filteredFonts = msg
 		return m, nil
 
+	case addFontToCollectionMsg, removeFontFromCollectionMsg:
+  	return m, m.loadFontCollection()
+
 	case fontCollectionMsg:
 		m.fonts.collection = msg
+		return m, nil
 
 	case csPathMsg:
 		m.path.chosenPath = cs2path.CS2Path(msg)

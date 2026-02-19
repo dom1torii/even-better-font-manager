@@ -10,14 +10,14 @@ import (
 	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
 
-	"github.com/dom1torii/even-better-font-manager/internal/config"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 type systemFontModel struct {
 	selection     int
 	startRow      int
-	fonts         []config.Font
-	filteredFonts []config.Font
+	fonts         []fonts.Font
+	filteredFonts []fonts.Font
 	searchInput   textinput.Model
 }
 
@@ -71,9 +71,9 @@ func (m *model) updateSystemFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, m.systemFont.searchInput.Focus()
 		case "enter", " ":
 			if len(m.systemFont.filteredFonts) > 0 {
-				selected := m.systemFont.filteredFonts[m.systemFont.selection]
-				m.fonts.collection.Add(selected)
+				fontToAdd := m.systemFont.filteredFonts[m.systemFont.selection]
 				m.state = stateFonts
+				return m, m.addFontToCollection(fontToAdd.Path)
 			}
 			return m, nil
 		case "q", "esc":
@@ -134,7 +134,7 @@ func (m *model) filterFonts() {
 	if value == "" {
 		m.systemFont.filteredFonts = m.systemFont.fonts
 	} else {
-		var filtered []config.Font
+		var filtered []fonts.Font
 		for _, f := range m.systemFont.fonts {
 			if strings.Contains(strings.ToLower(f.Name), value) {
 				filtered = append(filtered, f)

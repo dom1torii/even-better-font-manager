@@ -5,9 +5,10 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
+
+	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 type fontsModel struct {
@@ -15,7 +16,7 @@ type fontsModel struct {
 	leftSelection  int
 	rightSelection int
 	startRow       int
-	collection     *config.Collection
+	collection     []fonts.Font
 	menuItems      []menuItem
 }
 
@@ -59,7 +60,7 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.fonts.menuItems[idx].action(m)
 			}
 		case "j", "down":
-			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(m.fonts.collection.List())-1 {
+			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(m.fonts.collection)-1 {
 				m.fonts.leftSelection++
 			} else if m.fonts.colActive == 1 && m.fonts.rightSelection < len(m.fonts.menuItems)-1 {
 				m.fonts.rightSelection++
@@ -80,16 +81,17 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "d":
 			if m.fonts.colActive == 0 {
-				m.fonts.collection.Remove(m.fonts.leftSelection)
+				fontToRemove := m.fonts.collection[m.fonts.leftSelection]
+				return m, m.removeFontFromCollection(fontToRemove.Path)
 			}
 			return m, nil
 		case "p":
 			if m.fonts.colActive == 0 {
-				return m, m.previewFont(m.fonts.collection.List()[m.fonts.leftSelection].Path)
+				return m, m.previewFont(m.fonts.collection[m.fonts.leftSelection].Path)
 			}
 		case "enter", " ":
 			if m.fonts.colActive == 0 {
-				selectedFont := m.fonts.collection.List()[m.fonts.leftSelection]
+				selectedFont := m.fonts.collection[m.fonts.leftSelection]
 				m.chosenFont = font{
 					Font:  selectedFont,
 					Error: nil,
@@ -121,16 +123,16 @@ func (m *model) fontsView() string {
 	leftWidth := max(min(m.width-30, 40), 20)
 
 	var leftChoices []string
-	if len(m.fonts.collection.List()) == 0 {
+	if len(m.fonts.collection) == 0 {
 		emptySign := emptyListSignStyle.Render("No fonts added yet. Add them using options on the right")
 		leftChoices = append(leftChoices, emptySign)
 		m.fonts.colActive = 1
 	} else {
 		start := m.fonts.startRow
-		end := min(start+maxViewHeight, len(m.fonts.collection.List()))
+		end := min(start+maxViewHeight, len(m.fonts.collection))
 		for i := start; i < end; i++ {
 			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-			leftChoices = append(leftChoices, fontItem(m.fonts.collection.List()[i].Name+" "+m.fonts.collection.List()[i].Style, isSelected, leftWidth-4))
+			leftChoices = append(leftChoices, fontItem(m.fonts.collection[i].Name+" "+m.fonts.collection[i].Style, isSelected, leftWidth-4))
 		}
 	}
 

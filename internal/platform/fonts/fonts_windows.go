@@ -11,14 +11,12 @@ import (
 	"strings"
 
 	"golang.org/x/sys/windows/registry"
-
-	"github.com/dom1torii/even-better-font-manager/internal/config"
 )
 
 // nothing is tested, i just blindly wrote ts hoping it will work on windows. need to boot up a vm and im too lazy rn
 
-func GetSystemFonts() []config.Font {
-	var fonts []config.Font
+func GetSystemFonts() []Font {
+	var fonts []Font
 
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts`, registry.QUERY_VALUE)
 	if err != nil {
@@ -50,7 +48,7 @@ func GetSystemFonts() []config.Font {
 			continue
 		}
 
-		fonts = append(fonts, config.Font{
+		fonts = append(fonts, Font{
 			Name:  fontName,
 			Style: style,
 			Path:  path,

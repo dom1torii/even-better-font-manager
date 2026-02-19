@@ -3,7 +3,6 @@ package tui
 import (
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -82,7 +81,7 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 		fontName, fontStyle, err := fonts.GetName(path)
 		if err != nil {
 			return customFontMsg{
-				Font: config.Font{
+				Font: fonts.Font{
 					Name:  fontName,
 					Style: fontStyle,
 					Path:  path,
@@ -91,7 +90,7 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 			}
 		}
 		return customFontMsg{
-			Font: config.Font{
+			Font: fonts.Font{
 				Name:  fontName,
 				Style: fontStyle,
 				Path:  path,
@@ -103,7 +102,21 @@ func (m *model) setCustomFont(path string) tea.Cmd {
 
 func (m *model) loadFontCollection() tea.Cmd {
 	return func() tea.Msg {
-		return fontCollectionMsg(config.LoadCollection())
+		return fontCollectionMsg(fonts.GetCollection(m.cfg))
+	}
+}
+
+func (m *model) removeFontFromCollection(path string) tea.Cmd {
+	return func() tea.Msg {
+		fonts.RemoveFromCollection(path)
+		return removeFontFromCollectionMsg{}
+	}
+}
+
+func (m *model) addFontToCollection(path string) tea.Cmd {
+	return func() tea.Msg {
+		fonts.AddToCollection(m.cfg, path)
+		return addFontToCollectionMsg{}
 	}
 }
 

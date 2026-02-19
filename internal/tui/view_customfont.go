@@ -60,9 +60,8 @@ func initialCustomFontModel() customFontModel {
 					return fmt.Sprintf("    Will add: %s", m.customFont.chosenFont.Name+" "+m.customFont.chosenFont.Style)
 				},
 				action: func(m *model) tea.Cmd {
-					m.fonts.collection.Add(m.customFont.chosenFont.Font)
 					m.state = stateFonts
-					return nil
+					return m.addFontToCollection(m.customFont.chosenFont.Path)
 				},
 			},
 			{

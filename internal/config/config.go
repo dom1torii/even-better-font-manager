@@ -35,12 +35,12 @@ func Init() *Config {
 	homeDir := fs.GetHomeDir()
 
 	configPath := getConfigPath()
-	collectionPath := getCollectionPath()
+	// collectionPath := getCollectionPath()
 
 	defaultLogPath := filepath.Join(homeDir, "ebfm.log")
 
 	fs.EnsureFile(configPath)
-	fs.EnsureFile(collectionPath)
+	// fs.EnsureFile(collectionPath)
 
 	info, err := os.Stat(configPath)
 	if err == nil && info.Size() == 0 {

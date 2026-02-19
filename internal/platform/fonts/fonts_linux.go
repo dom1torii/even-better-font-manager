@@ -7,11 +7,9 @@ import (
 	"os/exec"
 	"sort"
 	"strings"
-
-	"github.com/dom1torii/even-better-font-manager/internal/config"
 )
 
-func GetSystemFonts() []config.Font {
+func GetSystemFonts() []Font {
 	cmd := exec.Command("fc-list")
 	output, err := cmd.Output()
 	if err != nil {
@@ -20,7 +18,7 @@ func GetSystemFonts() []config.Font {
 
 	lines := strings.Split(string(output), "\n")
 
-	var fonts []config.Font
+	var fonts []Font
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
 			continue
@@ -42,7 +40,7 @@ func GetSystemFonts() []config.Font {
 		styleList := strings.Split(stylesPart, ",")
 		style := strings.TrimSpace(styleList[0])
 
-		fonts = append(fonts, config.Font{
+		fonts = append(fonts, Font{
 			Name:  finalName,
 			Style: style,
 			Path:  path,

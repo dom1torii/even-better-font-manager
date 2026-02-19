@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
+	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
 )
 
 var (
@@ -49,7 +50,7 @@ type model struct {
 }
 
 type font struct {
-	config.Font
+	fonts.Font
 	Error error
 }
 
