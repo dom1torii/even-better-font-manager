@@ -107,9 +107,9 @@ func (m *model) loadFontCollection() tea.Cmd {
 	}
 }
 
-func (m *model) writeFontConfig(fontName string, fontPath string) tea.Cmd {
+func (m *model) writeFontConfig(fontName string, fontPath string, fontSize float64) tea.Cmd {
 	return func() tea.Msg {
-		fontconfig.Apply(m.cfg, fontName, fontPath)
+		fontconfig.Apply(m.cfg, fontName, fontPath, fontSize)
 		return fontConfigMsg{}
 	}
 }

@@ -3,6 +3,7 @@ package tui
 import (
 	"fmt"
 	"strings"
+	"math"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -11,12 +12,14 @@ import (
 
 type startModel struct {
 	selection int
+	fontSize  float64
 	menuItems []menuItem
 }
 
 func initialStartModel() startModel {
 	return startModel{
 		selection: 0,
+		fontSize: 1.0,
 		menuItems: []menuItem{
 			{
 				render: func(m *model) string {
@@ -29,7 +32,15 @@ func initialStartModel() startModel {
 			},
 			{
 				render: func(m *model) string {
-					return "(2) Preview font"
+					return fmt.Sprintf("(2) Font size: %.1f", m.start.fontSize)
+				},
+				action: func(m *model) tea.Cmd {
+					return nil
+				},
+			},
+			{
+				render: func(m *model) string {
+					return "(3) Preview font"
 				},
 				action: func(m *model) tea.Cmd {
 					return m.previewFont(m.chosenFont.Path)
@@ -37,18 +48,18 @@ func initialStartModel() startModel {
 			},
 			{
 				render: func(m *model) string {
-					return "(3) Apply"
+					return "(4) Apply"
 				},
 				status: func(m *model) string {
 					return fmt.Sprintf("    Will apply: %s %s", m.chosenFont.Name, m.chosenFont.Style)
 				},
 				action: func(m *model) tea.Cmd {
-					return m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path)
+					return m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path, m.start.fontSize)
 				},
 			},
 			{
 				render: func(m *model) string {
-					return "(4) Reset"
+					return "(5) Reset"
 				},
 				action: func(m *model) tea.Cmd {
 					return m.resetFontConfig()
@@ -56,7 +67,7 @@ func initialStartModel() startModel {
 			},
 			{
 				render: func(m *model) string {
-					return "(5) Change CS2 path"
+					return "(6) Change CS2 path"
 				},
 				action: func(m *model) tea.Cmd {
 					m.state = statePath
@@ -80,7 +91,7 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "1", "2", "3", "4", "5":
+		case "1", "2", "3", "4", "5", "6":
 			idx := int(msg.String()[0] - '1')
 			if idx < len(m.start.menuItems) {
 				m.start.selection = idx
@@ -93,6 +104,22 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "k", "up":
 			if m.start.selection > 0 {
 				m.start.selection--
+			}
+		case "h", "left":
+			if m.start.selection == 1 {
+				if m.start.fontSize > 0.1 {
+					m.start.fontSize = math.Round((m.start.fontSize - 0.1) * 10) / 10
+	      } else {
+	        m.start.fontSize = 0
+	      }
+			}
+		case "l", "right":
+			if m.start.selection == 1 {
+				if m.start.fontSize < 9.9 {
+					m.start.fontSize = math.Round((m.start.fontSize + 0.1) * 10) / 10
+	      } else {
+	        m.start.fontSize = 10.0
+	      }
 			}
 		case "enter", " ":
 			return m, m.start.menuItems[m.start.selection].action(m)

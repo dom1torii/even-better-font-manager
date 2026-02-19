@@ -41,7 +41,7 @@ const configTmpl = `<?xml version='1.0'?>
 		<edit name="pixelsize" mode="assign">
 			<times>
 				<name>pixelsize</name>
-				<double>{{.Size}}</double>
+				<double>{{printf "%.1f" .Size}}</double>
 			</times>
 		</edit>
 	</match>
@@ -49,7 +49,7 @@ const configTmpl = `<?xml version='1.0'?>
 	<!-- fonts-conf documentation: https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html -->
 </fontconfig>`
 
-func Apply(cfg *config.Config, fontName string, fontPath string) {
+func Apply(cfg *config.Config, fontName string, fontPath string, fontSize float64) {
 	copyFont(cfg, fontPath)
 
 	fontFile := filepath.Base(fontPath)
@@ -60,7 +60,7 @@ func Apply(cfg *config.Config, fontName string, fontPath string) {
 	}{
 		FontFile: fontFile,
 		FontName: fontName,
-		Size:     0.8,
+		Size:     fontSize,
 	}
 
 	confDir := filepath.Join(cfg.General.CS2Path, "game/core/panorama/fonts/conf.d")
