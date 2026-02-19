@@ -118,8 +118,8 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter", " ":
 			return m, m.customFont.menuItems[m.customFont.selection].action(m)
 		case "q", "esc":
-			m.Quitting = true
-			return m, tea.Quit
+			m.state = stateFonts
+			return m, nil
 		}
 	}
 	return m, nil
@@ -139,7 +139,7 @@ func (m *model) customFontView() string {
 		"%s\n\n%s\n\n%s",
 		wordwrap.String(titleStyle.Render("Add custom font:"), m.width),
 		lipgloss.NewStyle().Width(35).Render(list),
-		wordwrap.String(helpStyle.Render("(↓↑: move | space/enter: select | q/esc: quit)"), m.width),
+		wordwrap.String(helpStyle.Render("(↓↑: move | space/enter: select | q/esc: back)"), m.width),
 	)
 
 	return lipgloss.Place(

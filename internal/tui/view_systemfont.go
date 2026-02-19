@@ -112,7 +112,7 @@ func (m *model) systemFontView() string {
 		"%s\n\n%s\n\n%s",
 		titleStyle.Render("Add system font"),
 		content,
-		wordwrap.String(helpStyle.Render("(↑↓: move | p: preview | f: search | enter/space: add | q: back)"), m.width),
+		wordwrap.String(helpStyle.Render("(↑↓: move | p: preview | f: search | enter/space: add | q/esc: back)"), m.width),
 	)
 
 	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)

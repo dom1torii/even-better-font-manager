@@ -102,8 +102,8 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.fonts.menuItems[m.fonts.rightSelection].action(m)
 			}
 		case "q", "esc":
-			m.Quitting = true
-			return m, tea.Quit
+			m.state = stateStart
+			return m, nil
 		}
 
 		// left column scrolling
@@ -157,7 +157,7 @@ func (m *model) fontsView() string {
 		"%s\n\n%s\n\n%s",
 		titleStyle.Render("Your fonts"),
 		columns,
-		wordwrap.String(helpStyle.Render("(←↓↑→: move | p: preview font | d: remove font | q: quit)"), m.width),
+		wordwrap.String(helpStyle.Render("(←↓↑→: move | p: preview font | d: remove font | q/esc: back)"), m.width),
 	)
 
 	return lipgloss.Place(
