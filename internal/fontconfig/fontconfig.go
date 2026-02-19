@@ -116,7 +116,7 @@ func Reset(cfg *config.Config) {
 	confPath := filepath.Join(confDir, "42-repl-global.conf")
 
 	if err := os.RemoveAll(fontsDir); err != nil {
-    log.Println("Failed to delete custom fonts directory: ", err)
+		log.Println("Failed to delete custom fonts directory: ", err)
 	}
 
 	if err := os.RemoveAll(confPath); err != nil {

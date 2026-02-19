@@ -2,8 +2,8 @@ package tui
 
 import (
 	"fmt"
-	"strings"
 	"math"
+	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -19,7 +19,7 @@ type startModel struct {
 func initialStartModel() startModel {
 	return startModel{
 		selection: 0,
-		fontSize: 1.0,
+		fontSize:  1.0,
 		menuItems: []menuItem{
 			{
 				render: func(m *model) string {
@@ -108,18 +108,18 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "h", "left":
 			if m.start.selection == 1 {
 				if m.start.fontSize > 0.1 {
-					m.start.fontSize = math.Round((m.start.fontSize - 0.1) * 10) / 10
-	      } else {
-	        m.start.fontSize = 0
-	      }
+					m.start.fontSize = math.Round((m.start.fontSize-0.1)*10) / 10
+				} else {
+					m.start.fontSize = 0
+				}
 			}
 		case "l", "right":
 			if m.start.selection == 1 {
 				if m.start.fontSize < 9.9 {
-					m.start.fontSize = math.Round((m.start.fontSize + 0.1) * 10) / 10
-	      } else {
-	        m.start.fontSize = 10.0
-	      }
+					m.start.fontSize = math.Round((m.start.fontSize+0.1)*10) / 10
+				} else {
+					m.start.fontSize = 10.0
+				}
 			}
 		case "enter", " ":
 			return m, m.start.menuItems[m.start.selection].action(m)

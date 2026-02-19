@@ -8,7 +8,7 @@ import (
 )
 
 type CS2Path struct {
-	Path string
+	Path  string
 	Error error
 }
 
@@ -20,7 +20,7 @@ func Verify(path string) CS2Path {
 	_, err := os.Stat(pakFile)
 	if strings.Contains(normalizedPath, "steamapps/common/Counter-Strike Global Offensive") && err == nil {
 		verifiedPath := CS2Path{
-			Path: path,
+			Path:  path,
 			Error: nil,
 		}
 		return verifiedPath
@@ -28,7 +28,7 @@ func Verify(path string) CS2Path {
 
 	// maybe change this error to something else, not sure what yet
 	verifiedPath := CS2Path{
-		Path: "",
+		Path:  "",
 		Error: fmt.Errorf("CS2 path isn't correct"),
 	}
 	return verifiedPath
