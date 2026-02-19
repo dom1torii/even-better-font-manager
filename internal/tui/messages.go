@@ -20,4 +20,7 @@ type systemFontsMsg []fonts.Font
 type customFontPathMsg string
 type customFontMsg font
 
-type fontConfigMsg struct{}
+type writeFontConfigMsg string
+type resetFontConfigMsg string
+type clearApplyStatusMsg struct{}
+type clearResetStatusMsg struct{}

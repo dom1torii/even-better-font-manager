@@ -11,6 +11,20 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 
+	case writeFontConfigMsg:
+		m.start.applyStatus = string(msg)
+		return m, m.clearApplyStatus()
+
+	case resetFontConfigMsg:
+		m.start.resetStatus = string(msg)
+		return m, m.clearResetStatus()
+
+	case clearApplyStatusMsg:
+		m.start.applyStatus = ""
+
+	case clearResetStatusMsg:
+		m.start.resetStatus = ""
+
 	case customFontPathMsg:
 		return m, m.setCustomFont(string(msg))
 

@@ -1,6 +1,8 @@
 package tui
 
 import (
+	"time"
+
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
@@ -123,13 +125,26 @@ func (m *model) addFontToCollection(path string) tea.Cmd {
 func (m *model) writeFontConfig(fontName string, fontPath string, fontSize float64) tea.Cmd {
 	return func() tea.Msg {
 		fontconfig.Apply(m.cfg, fontName, fontPath, fontSize)
-		return fontConfigMsg{}
+		return writeFontConfigMsg("Font applied successfully")
 	}
 }
 
 func (m *model) resetFontConfig() tea.Cmd {
 	return func() tea.Msg {
 		fontconfig.Reset(m.cfg)
-		return fontConfigMsg{}
+		return resetFontConfigMsg("Config reset successfully")
 	}
+}
+
+// idk if these are the correct way to clear the statuses but its the only way i found
+func (m *model) clearApplyStatus() tea.Cmd {
+  return tea.Tick(2*time.Second, func(t time.Time) tea.Msg {
+    return clearApplyStatusMsg{}
+  })
+}
+
+func (m *model) clearResetStatus() tea.Cmd {
+  return tea.Tick(2*time.Second, func(t time.Time) tea.Msg {
+    return clearResetStatusMsg{}
+  })
 }

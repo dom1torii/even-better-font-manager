@@ -14,6 +14,9 @@ type startModel struct {
 	selection int
 	fontSize  float64
 	menuItems []menuItem
+
+	applyStatus string
+	resetStatus string
 }
 
 func initialStartModel() startModel {
@@ -51,6 +54,9 @@ func initialStartModel() startModel {
 					return "(4) Apply"
 				},
 				status: func(m *model) string {
+					if m.start.applyStatus != "" {
+						return fmt.Sprintf("    %s", statusOkStyle.Render(m.start.applyStatus))
+					}
 					return fmt.Sprintf("    Will apply: %s %s", m.chosenFont.Name, m.chosenFont.Style)
 				},
 				action: func(m *model) tea.Cmd {
@@ -60,6 +66,12 @@ func initialStartModel() startModel {
 			{
 				render: func(m *model) string {
 					return "(5) Reset"
+				},
+				status: func(m *model) string {
+					if m.start.resetStatus != "" {
+						return fmt.Sprintf("    %s", statusOkStyle.Render(m.start.resetStatus))
+					}
+					return ""
 				},
 				action: func(m *model) tea.Cmd {
 					return m.resetFontConfig()
