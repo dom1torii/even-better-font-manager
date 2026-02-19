@@ -22,5 +22,5 @@ Other installation methods will be added after first release is out.
 4. `cd` into the folder
 5. Build the binary: `go build ./cmd/ebfm/`
 
-### Planned features/improvements
-- Rework how font collection is stored
+## Planned features/improvements
+- Rework how font collection is stored.
