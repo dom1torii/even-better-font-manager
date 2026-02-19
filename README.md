@@ -1,6 +1,5 @@
 > [!WARNING]
-> The tool is actively in development, so expect a lot of bugs and missing features. However, it should do its thing and probably wont break your CS2 fonts.  
-> **For example**: You can't control font size yet and it allows you to enter some wrong data without limitations.
+> The tool is actively in development, so expect bugs and missing features. However, it should do its thing and probably wont break your CS2 fonts.  
 
 # Even Better Font Manager
 EBFM - Cross-platform TUI tool that makes managing CS2 fonts easy.
