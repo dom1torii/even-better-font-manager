@@ -145,7 +145,7 @@ func (m *model) startView() string {
 		"%s\n\n%s\n\n%s",
 		wordwrap.String(titleStyle.Render("Even Better Font Manager"), m.width),
 		lipgloss.NewStyle().Width(35).Render(list),
-		wordwrap.String(helpStyle.Render("(↓↑: move | space/enter: select | q/esc: quit)"), m.width),
+		wordwrap.String(helpStyle.Render("(↓↑: move | ←→: adjust font size | space/enter: select | q/esc: quit)"), m.width),
 	)
 
 	return lipgloss.Place(
