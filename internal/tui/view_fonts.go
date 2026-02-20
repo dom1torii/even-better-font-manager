@@ -5,7 +5,6 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
 
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -132,14 +131,14 @@ func (m *model) fontsView() string {
 		end := min(start+maxViewHeight, len(m.fonts.collection))
 		for i := start; i < end; i++ {
 			isSelected := (m.fonts.colActive == 0 && m.fonts.leftSelection == i)
-			leftChoices = append(leftChoices, fontItem(m.fonts.collection[i].Name+" "+m.fonts.collection[i].Style, isSelected, leftWidth-4))
+			leftChoices = append(leftChoices, menuItemStyle(m.fonts.collection[i].Name+" "+m.fonts.collection[i].Style, isSelected, leftWidth-4))
 		}
 	}
 
 	var rightChoices []string
 	for i, item := range m.fonts.menuItems {
 		isSelected := (m.fonts.colActive == 1 && m.fonts.rightSelection == i)
-		rightChoices = append(rightChoices, fontItem(item.render(m), isSelected, 0))
+		rightChoices = append(rightChoices, menuItemStyle(item.render(m), isSelected, 0))
 	}
 
 	rightTitle := lipgloss.NewStyle().PaddingTop(1).Render("Add font:")
@@ -167,15 +166,4 @@ func (m *model) fontsView() string {
 		lipgloss.Center,
 		view,
 	)
-}
-
-func fontItem(label string, isSelected bool, width int) string {
-	truncated := label
-	if width > 0 {
-		truncated = truncate.StringWithTail(label, uint(width), "...")
-	}
-	if isSelected {
-		return selectionStyle.Render(truncated)
-	}
-	return truncated
 }

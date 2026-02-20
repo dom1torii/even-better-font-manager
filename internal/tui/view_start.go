@@ -147,7 +147,7 @@ func (m *model) startView() string {
 		if item.disabled != nil && item.disabled(m) {
 			choices = append(choices, disabledStyle.Render(item.render(m)))
 		} else {
-			choices = append(choices, startItemStyle(item.render(m), m.start.selection == i))
+			choices = append(choices, menuItemStyle(item.render(m), m.start.selection == i, 0))
 			if item.status != nil && item.status(m) != "" {
 				choices = append(choices, statusStyle.Render(item.status(m)))
 			}
@@ -169,11 +169,4 @@ func (m *model) startView() string {
 		lipgloss.Center,
 		view,
 	)
-}
-
-func startItemStyle(label string, isSelected bool) string {
-	if isSelected {
-		return selectionStyle.Render(label)
-	}
-	return label
 }

@@ -129,7 +129,7 @@ func (m *model) customFontView() string {
 		if item.disabled != nil && item.disabled(m) {
 			choices = append(choices, disabledStyle.Render(item.render(m)))
 		} else {
-			choices = append(choices, customFontItemStyle(item.render(m), m.customFont.selection == i))
+			choices = append(choices, menuItemStyle(item.render(m), m.customFont.selection == i, 0))
 			if item.status != nil && item.status(m) != "" {
 				choices = append(choices, statusStyle.Render(item.status(m)))
 			}
@@ -151,11 +151,4 @@ func (m *model) customFontView() string {
 		lipgloss.Center,
 		view,
 	)
-}
-
-func customFontItemStyle(label string, isSelected bool) string {
-	if isSelected {
-		return selectionStyle.Render(label)
-	}
-	return label
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/muesli/reflow/truncate"
 	"github.com/muesli/reflow/wordwrap"
 
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -101,7 +100,7 @@ func (m *model) systemFontView() string {
 
 	for i := start; i < end; i++ {
 		isSelected := m.systemFont.selection == i
-		choices = append(choices, systemFontItem(m.systemFont.filteredFonts[i].Name+" "+m.systemFont.filteredFonts[i].Style, isSelected, fontsWidth-4))
+		choices = append(choices, menuItemStyle(m.systemFont.filteredFonts[i].Name+" "+m.systemFont.filteredFonts[i].Style, isSelected, fontsWidth-4))
 	}
 
 	fontList := lipgloss.NewStyle().PaddingRight(4).Border(lipgloss.NormalBorder()).Width(fontsWidth).Height(maxViewHeight).Render(lipgloss.JoinVertical(lipgloss.Left, choices...))
@@ -116,17 +115,6 @@ func (m *model) systemFontView() string {
 	)
 
 	return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, view)
-}
-
-func systemFontItem(label string, isSelected bool, width int) string {
-	truncated := label
-	if width > 0 {
-		truncated = truncate.StringWithTail(label, uint(width), "...")
-	}
-	if isSelected {
-		return selectionStyle.Render(truncated)
-	}
-	return truncated
 }
 
 func (m *model) filterFonts() {

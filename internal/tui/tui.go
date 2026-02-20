@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/truncate"
 
 	"github.com/dom1torii/even-better-font-manager/internal/config"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
@@ -92,4 +93,16 @@ type menuItem struct {
 	status   func(m *model) string
 	action   func(m *model) tea.Cmd
 	disabled func(m *model) bool
+}
+
+// if width is 0 we just dont trucate the item
+func menuItemStyle(label string, isSelected bool, width int) string {
+	truncated := label
+	if width > 0 {
+		truncated = truncate.StringWithTail(label, uint(width), "...")
+	}
+	if isSelected {
+		return selectionStyle.Render(truncated)
+	}
+	return truncated
 }
