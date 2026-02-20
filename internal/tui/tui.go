@@ -18,6 +18,7 @@ var (
 	helpStyle          = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).PaddingLeft(4).PaddingBottom(1)
 	inputStyle         = lipgloss.NewStyle().Foreground(lipgloss.Color("0")).Italic(true)
 	emptyListSignStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("0"))
+	disabledStyle      = lipgloss.NewStyle().Foreground(lipgloss.Color("0"))
 )
 
 type sessionState int
@@ -87,7 +88,8 @@ func createInput(placeholder, prompt string, width int) textinput.Model {
 }
 
 type menuItem struct {
-	render func(m *model) string
-	status func(m *model) string
-	action func(m *model) tea.Cmd
+	render   func(m *model) string
+	status   func(m *model) string
+	action   func(m *model) tea.Cmd
+	disabled func(m *model) bool
 }

@@ -48,6 +48,9 @@ func initialStartModel() startModel {
 				action: func(m *model) tea.Cmd {
 					return m.previewFont(m.chosenFont.Path)
 				},
+				disabled: func(m *model) bool {
+				  return m.chosenFont.Name == ""
+				},
 			},
 			{
 				render: func(m *model) string {
@@ -61,6 +64,9 @@ func initialStartModel() startModel {
 				},
 				action: func(m *model) tea.Cmd {
 					return m.writeFontConfig(m.chosenFont.Name, m.chosenFont.Path, m.start.fontSize)
+				},
+				disabled: func(m *model) bool {
+				  return m.chosenFont.Name == ""
 				},
 			},
 			{
@@ -104,19 +110,11 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "1", "2", "3", "4", "5", "6":
-			idx := int(msg.String()[0] - '1')
-			if idx < len(m.start.menuItems) {
-				m.start.selection = idx
-				return m, m.start.menuItems[idx].action(m)
-			}
+			return m, m.handleNumberPress(msg.String(), &m.start.selection, m.start.menuItems)
 		case "j", "down":
-			if m.start.selection < len(m.start.menuItems)-1 {
-				m.start.selection++
-			}
+			m.start.selection = m.nextMenuItem(m.start.selection, m.start.menuItems)
 		case "k", "up":
-			if m.start.selection > 0 {
-				m.start.selection--
-			}
+			m.start.selection = m.prevMenuItem(m.start.selection, m.start.menuItems)
 		case "h", "left":
 			if m.start.selection == 1 {
 				if m.start.fontSize > 0.1 {
@@ -146,9 +144,13 @@ func (m *model) updateStartSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *model) startView() string {
 	var choices []string
 	for i, item := range m.start.menuItems {
-		choices = append(choices, startItemStyle(item.render(m), m.start.selection == i))
-		if item.status != nil && item.status(m) != "" {
-			choices = append(choices, statusStyle.Render(item.status(m)))
+		if item.disabled != nil && item.disabled(m) {
+			choices = append(choices, disabledStyle.Render(item.render(m)))
+		} else {
+			choices = append(choices, startItemStyle(item.render(m), m.start.selection == i))
+			if item.status != nil && item.status(m) != "" {
+				choices = append(choices, statusStyle.Render(item.status(m)))
+			}
 		}
 	}
 

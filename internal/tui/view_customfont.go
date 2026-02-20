@@ -51,6 +51,9 @@ func initialCustomFontModel() customFontModel {
 				action: func(m *model) tea.Cmd {
 					return m.previewFont(m.customFont.chosenFont.Path)
 				},
+				disabled: func(m *model) bool {
+				  return m.customFont.chosenFont.Name == ""
+				},
 			},
 			{
 				render: func(m *model) string {
@@ -62,6 +65,9 @@ func initialCustomFontModel() customFontModel {
 				action: func(m *model) tea.Cmd {
 					m.state = stateFonts
 					return m.addFontToCollection(m.customFont.chosenFont.Path)
+				},
+				disabled: func(m *model) bool {
+				  return m.customFont.chosenFont.Name == ""
 				},
 			},
 			{
@@ -98,19 +104,11 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 		// normal keypresses
 		switch msg.String() {
 		case "1", "2", "3", "4":
-			idx := int(msg.String()[0] - '1')
-			if idx < len(m.customFont.menuItems) {
-				m.customFont.selection = idx
-				return m, m.customFont.menuItems[idx].action(m)
-			}
+			return m, m.handleNumberPress(msg.String(), &m.customFont.selection, m.customFont.menuItems)
 		case "j", "down":
-			if m.customFont.selection < len(m.customFont.menuItems)-1 {
-				m.customFont.selection++
-			}
+			m.customFont.selection = m.nextMenuItem(m.customFont.selection, m.customFont.menuItems)
 		case "k", "up":
-			if m.customFont.selection > 0 {
-				m.customFont.selection--
-			}
+			m.customFont.selection = m.prevMenuItem(m.customFont.selection, m.customFont.menuItems)
 		case "i":
 			if m.customFont.selection == 0 {
 				return m, m.customFont.pathInput.Focus()
@@ -128,9 +126,13 @@ func (m *model) updateCustomFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *model) customFontView() string {
 	var choices []string
 	for i, item := range m.customFont.menuItems {
-		choices = append(choices, customFontItemStyle(item.render(m), m.customFont.selection == i))
-		if item.status != nil && item.status(m) != "" {
-			choices = append(choices, statusStyle.Render(item.status(m)))
+		if item.disabled != nil && item.disabled(m) {
+			choices = append(choices, disabledStyle.Render(item.render(m)))
+		} else {
+			choices = append(choices, customFontItemStyle(item.render(m), m.customFont.selection == i))
+			if item.status != nil && item.status(m) != "" {
+				choices = append(choices, statusStyle.Render(item.status(m)))
+			}
 		}
 	}
 
