@@ -5,10 +5,10 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
+	"github.com/dom1torii/even-better-font-manager/internal/filechooser"
 	"github.com/dom1torii/even-better-font-manager/internal/fontconfig"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/cs2path"
 	"github.com/dom1torii/even-better-font-manager/internal/platform/fonts"
-	"github.com/dom1torii/even-better-font-manager/internal/zenity"
 )
 
 func (m *model) Init() tea.Cmd {
@@ -31,7 +31,7 @@ func (m *model) detectCsPath() tea.Cmd {
 
 func (m *model) chooseCsPath(title string) tea.Cmd {
 	return func() tea.Msg {
-		path := zenity.Open("directory", title)
+		path := filechooser.Open("directory", title)
 		return csPathMsg(cs2path.Verify(path))
 	}
 }
@@ -73,7 +73,7 @@ func (m *model) previewFont(path string) tea.Cmd {
 
 func (m *model) chooseCustomFontPath(title string) tea.Cmd {
 	return func() tea.Msg {
-		path := zenity.Open("", title)
+		path := filechooser.Open("", title)
 		return customFontPathMsg(path)
 	}
 }

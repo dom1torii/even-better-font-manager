@@ -1,4 +1,4 @@
-package zenity
+package filechooser
 
 import (
 	"log"
