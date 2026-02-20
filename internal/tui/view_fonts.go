@@ -53,11 +53,7 @@ func (m *model) updateFontSelection(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "1", "2":
-			idx := int(msg.String()[0] - '1')
-			if idx < len(m.fonts.menuItems) {
-				m.fonts.rightSelection = idx
-				return m, m.fonts.menuItems[idx].action(m)
-			}
+			m.handleNumberPress(msg.String(), &m.fonts.rightSelection, m.fonts.menuItems)
 		case "j", "down":
 			if m.fonts.colActive == 0 && m.fonts.leftSelection < len(m.fonts.collection)-1 {
 				m.fonts.leftSelection++
